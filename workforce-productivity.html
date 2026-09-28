@@ -1,0 +1,347 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Workforce Productivity</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#f5f6f8;--card:#ffffff;--ink:#2b3237;--muted:#626e76;--faint:#7e8c96;--line:#e0e5e9;--inset:#f4f6f9;--brand:#1793e6;--surface:#ffffff;
+--ok:#008344;--ok-bg:#e4fbf3;--warn:#c27d00;--warn-bg:#fef5e5;--inert:#626e76;--inert-bg:#eef1f4;--bad:#d13636;--bad-bg:#ffecec;
+--s-app:#008300;--s-draft:#6b7a86;--s-reop:#eda100;--s-prog:#2a78d6;--s-rej:#e34948;
+--o1:#86b6ef;--o2:#6da7ec;--o3:#3987e5;--o4:#256abf;--o5:#184f95;
+--tip-bg:#2b3237;--tip-ink:#f4f6f8;--shadow:0 1px 2px rgba(20,30,40,.05),0 2px 8px rgba(20,30,40,.04);
+--ease:cubic-bezier(.2,0,0,1);--r-lg:12px;--r-xl:16px;--r-2xl:22px;--appbar-h:0px;--logo-a:#15375a;--logo-b:#9ab6cd}
+:root[data-theme="dark"]{
+--bg:#0e1216;--card:#161b20;--ink:#f4f6f8;--muted:#c2ccd3;--faint:#99aab6;--line:#2d353d;--inset:#1b2127;--brand:#45a9eb;--surface:#161b20;
+--ok:#52c88f;--ok-bg:rgba(0,164,85,.16);--warn:#f9c566;--warn-bg:rgba(245,158,0,.16);--inert:#99aab6;--inert-bg:#232a31;--bad:#ff8e8e;--bad-bg:rgba(255,67,67,.16);
+--s-app:#2fa84f;--s-draft:#8595a2;--s-reop:#f2b632;--s-prog:#4a90e2;--s-rej:#ef6665;
+--o1:#a9cbf4;--o2:#86b6ef;--o3:#6da7ec;--o4:#3987e5;--o5:#256abf;
+--tip-bg:#f4f6f8;--tip-ink:#161b20;--shadow:none;--logo-a:#e6eef6;--logo-b:#9ab6cd}
+*{box-sizing:border-box}
+html{scroll-padding-top:var(--appbar-h)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 14px/1.45 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh}
+.num,td.n,.kv,.val{font-variant-numeric:tabular-nums}
+.wrap{max-width:1500px;margin:0 auto;padding:0 20px calc(28px + env(safe-area-inset-bottom,0px))}
+/* app bar */
+.appbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.appbar .in{max-width:1500px;margin:0 auto;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px}
+.brand{min-width:0}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)}
+h1{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:2px 0 0}
+.lede{font-size:12.5px;color:var(--muted);margin-top:2px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+select,input[type=number]{font:inherit;font-size:13.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;height:36px;padding:0 10px;min-width:140px;transition:border-color .12s var(--ease),box-shadow .12s var(--ease)}
+select{appearance:none;-webkit-appearance:none;padding-right:30px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237e8c96' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+#fProject{min-width:220px}#fSpan{min-width:110px;width:110px}
+select:hover,input:hover{border-color:var(--faint)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.iconbtn{height:36px;width:36px;display:grid;place-items:center;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:10px;cursor:pointer;transition:transform .12s var(--ease),color .12s var(--ease)}
+.iconbtn:hover{color:var(--ink)}.iconbtn:active{transform:scale(.985)}
+.iconbtn svg{width:16px;height:16px}
+.flexcol{display:flex;flex-direction:column}.grow{flex:1}
+.subsec{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}
+.subsec .cap,.more .cap{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:10px;display:block}
+.stack.sm{margin:0;height:14px}
+.brow.tr .val em{min-width:58px;text-align:left}
+.nil{font-size:12px;color:var(--faint)}
+#cat .note{margin-top:auto}#cat .subsec+.note{margin-top:max(16px,auto)}
+#cat>.note{margin-top:16px}
+.note b{font-weight:600}
+/* logo */
+.logo{display:flex;align-items:center;gap:9px;padding-right:18px;margin-right:18px;border-right:1px solid var(--line);align-self:center;text-decoration:none}
+.logo svg{height:30px;width:auto;display:block}
+.logo .wm{display:flex;flex-direction:column;line-height:1}
+.logo .wm b{font:700 17px/1 "Montserrat","Inter",sans-serif;letter-spacing:.06em;color:var(--logo-a)}
+.logo .wm b span{color:var(--logo-b)}
+.logo .wm i{font:500 8.5px/1 "Montserrat","Inter",sans-serif;font-style:normal;color:var(--logo-a);margin-top:4px;padding-top:3px;border-top:1px solid var(--logo-a);letter-spacing:.02em}
+.brandrow{display:flex;align-items:center;margin-right:auto;min-width:0}
+@media (max-width:760px){.logo{padding-right:12px;margin-right:12px}.logo .wm{display:none}.logo svg{height:34px}}
+/* sections */
+.sec{margin-top:26px}
+.hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 12px}
+.hd h2{font-size:14.5px;font-weight:600;letter-spacing:-.01em;margin:0}
+.hd p{font-size:12px;color:var(--muted);margin:0}
+.hd .right{margin-left:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);padding:18px 20px;box-shadow:var(--shadow);min-width:0}
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px 13px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;min-width:0}
+.kh{display:flex;align-items:center;gap:10px;margin-bottom:4px;min-width:0}
+.kic{--c:var(--brand);width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 18%,transparent)}
+.kic svg{width:18px;height:18px}
+.kpi{transition:border-color .12s var(--ease)}.kpi:hover{border-color:color-mix(in srgb,var(--faint) 60%,var(--line))}
+.kh .kl{line-height:1.25}
+.ku{font-size:11.5px;color:var(--faint);margin-top:-2px}
+.kv small{white-space:nowrap}
+.kv{font-size:26px;font-weight:600;letter-spacing:-.03em;line-height:1}
+.kv small{font-size:12px;font-weight:500;letter-spacing:0;color:var(--faint);margin-left:3px}
+.kl{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.chip{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;font-size:11px;font-weight:500;line-height:1;padding:4px 7px;border-radius:999px;background:var(--inert-bg);color:var(--inert);white-space:nowrap}
+.chip svg{width:11px;height:11px}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}.chip.bad{background:var(--bad-bg);color:var(--bad)}.chip.warn{background:var(--warn-bg);color:var(--warn)}
+/* two-up */
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(390px,1fr));gap:16px}
+@media (max-width:760px){.row2{grid-template-columns:1fr}}
+/* bars */
+.stack{display:flex;gap:2px;height:14px;border-radius:4px;overflow:hidden;background:var(--inset);margin:4px 0 16px}
+.seg{height:100%;transition:filter .12s var(--ease);cursor:default;min-width:2px}
+.seg:hover,.seg:focus-visible{filter:brightness(1.12)}
+.seg:focus-visible{outline-offset:1px}
+.rows{display:flex;flex-direction:column;gap:10px}
+.brow{display:grid;grid-template-columns:110px minmax(0,1fr) 104px;align-items:center;gap:12px;font-size:13px}
+.brow .lab{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.track{height:14px;background:var(--inset);border-radius:4px;overflow:hidden}
+.track .seg{border-radius:4px}
+.val{font-size:13px;font-weight:500;text-align:right;white-space:nowrap;min-width:52px}
+.val em{font-style:normal;color:var(--faint);font-weight:400;margin-left:6px;display:inline-block;min-width:38px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.more{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.more .cap{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);width:100%;margin-bottom:2px}
+.more .chip{font-size:11.5px;padding:5px 8px;background:var(--inset);color:var(--ink)}
+.more .chip b{font-weight:500;color:var(--muted)}
+.note{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--warn);background:var(--warn-bg);border-radius:10px;padding:8px 10px;margin-top:14px}
+.note svg{width:14px;height:14px;flex:none;margin-top:1px}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:28px 12px;background:var(--inset);border-radius:var(--r-lg)}
+/* table */
+.tblcard{padding:0;overflow:hidden}
+.scrollx{overflow-x:auto;max-width:100%}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:right;padding:10px 12px;background:var(--inset);border-bottom:1px solid var(--line);white-space:nowrap}
+th.mo{text-align:center;color:var(--ink);letter-spacing:.05em;border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+th.first{border-left:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.n{text-align:right}
+td.first{border-left:1px solid var(--line)}
+th.sticky,td.sticky{position:sticky;left:0;z-index:2;text-align:left;background:var(--card);box-shadow:1px 0 0 var(--line)}
+th.sticky{background:var(--inset);z-index:3}
+tr.trade td{font-weight:600}
+tr.trade td.sticky{background:var(--card)}
+tr.child td{color:var(--muted);background:color-mix(in srgb,var(--inset) 55%,var(--card))}
+tr.child td.sticky{padding-left:44px;background:color-mix(in srgb,var(--inset) 55%,var(--card))}
+tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--inset)}
+td.rate{font-weight:600;color:var(--ink)}
+tr.child td.rate{font-weight:500}
+.unit{color:var(--faint);font-weight:400;margin-left:3px;font-size:11.5px}
+.tog{font:inherit;display:inline-flex;align-items:center;gap:8px;background:none;border:0;color:inherit;padding:0;cursor:pointer;font-weight:600}
+.tog .cv{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;border:1px solid var(--line);background:var(--card);color:var(--muted);transition:transform .12s var(--ease)}
+.tog .cv svg{width:12px;height:12px;transition:transform .2s var(--ease)}
+.tog[aria-expanded="true"] .cv svg{transform:rotate(90deg)}
+.tog:active .cv{transform:scale(.97)}
+.textbtn{font:inherit;font-size:12px;font-weight:500;color:var(--brand);background:none;border:0;padding:4px 2px;cursor:pointer}
+.textbtn:hover{text-decoration:underline}
+.formula{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--line);background:var(--card)}
+.formula b{color:var(--ink);font-weight:600}
+.foot{font-size:11.5px;color:var(--faint);margin-top:18px}
+/* tooltip */
+#tip{position:fixed;z-index:9999;pointer-events:none;background:var(--tip-bg);color:var(--tip-ink);font-size:12px;line-height:1.35;padding:7px 9px;border-radius:8px;max-width:240px;opacity:0;transform:translate(-50%,calc(-100% - 8px)) scale(.98);transition:opacity .09s var(--ease),transform .09s var(--ease)}
+#tip.on{opacity:1;transform:translate(-50%,calc(-100% - 8px))}
+#tip b{font-weight:600}
+@media (max-width:760px){
+ .wrap{padding:0 14px calc(24px + env(safe-area-inset-bottom,0px))}
+ .appbar .in{padding:12px 14px}
+ .filters{width:100%}.fld{flex:1 1 140px}
+ select,input[type=number]{font-size:16px;width:100%;min-width:0}#fProject,#fSpan{min-width:0;width:100%}
+ .brow{grid-template-columns:84px minmax(0,1fr) 96px;gap:10px}
+ .card{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+</style></head><body>
+<header class="appbar" id="appbar"><div class="in">
+<div class="brandrow"><a class="logo" href="#" aria-label="VisiLean — Construction, simplified">
+  <svg viewBox="0 0 640 490" aria-hidden="true"><polygon fill="var(--logo-b)" points="165,122 238,0 480,88 242,490"/><polygon fill="var(--logo-a)" points="0,62 242,150 242,490 0,405"/><polygon fill="var(--logo-a)" points="480,88 480,425 315,368"/><polygon fill="var(--logo-b)" points="480,295 638,350 480,425"/></svg>
+  <span class="wm"><b>VISI<span>LEAN</span></b><i>Construction, simplified</i></span></a>
+ <div class="brand">
+  <div class="eyebrow">VisiLean · Workforce</div>
+  <h1>Workforce productivity</h1>
+  <div class="lede">Man-days deployed and output achieved, by trade and gang</div>
+ </div></div>
+ <div class="filters">
+  <label class="fld">Project<select id="fProject"></select></label>
+  <label class="fld">Gang<select id="fGang"></select></label>
+  <label class="fld">Month<select id="fMonth"></select></label>
+  <label class="fld" title="Converts tower locations to km for erection and foundation">Avg span (km)<input type="number" id="fSpan" step="0.025" min="0.05" value="0.375" inputmode="decimal"></label>
+  <button class="iconbtn" id="theme" aria-pressed="false" aria-label="Switch to dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+ </div>
+</div></header>
+
+<main class="wrap">
+ <div class="kpis" id="kpis" aria-live="polite"></div>
+
+ <div class="row2 sec">
+  <section class="card flexcol" aria-labelledby="hCat">
+   <div class="hd"><h2 id="hCat">Workforce by skill</h2><p>Share of man-days by skill level</p></div>
+   <div id="cat" class="flexcol grow"></div>
+  </section>
+  <section class="card" aria-labelledby="hGang">
+   <div class="hd"><h2 id="hGang">Top gangs by man-days</h2><p>Coloured by trade</p>
+    <div class="legend right" id="tLegend"></div></div>
+   <div id="gang"></div>
+  </section>
+ </div>
+
+ <section class="sec" aria-labelledby="hMx">
+  <div class="hd"><h2 id="hMx">Productivity by trade and month</h2><p>Man-days per km — lower is better. Expand a trade to see its gangs.</p>
+   <button class="textbtn right" id="expAll"></button></div>
+  <div class="card tblcard">
+   <div class="scrollx"><table id="matrix"></table></div>
+   <div class="formula">
+    <span><b>Man-days per km</b> = man-days ÷ km completed</span>
+    <span><b>Erection, foundation</b> — tower locations × avg span</span>
+    <span><b>Stringing</b> — measured directly in km</span>
+   </div>
+  </div>
+ </section>
+ <p class="foot">Sample data for illustration. Project and gang names are placeholders.</p>
+</main>
+<div id="tip" role="tooltip"></div>
+
+<script>
+// ---------- sample data (seeded, anonymised) ----------
+let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+const PROJECTS=["Project Alpha (400 kV line)","Project Beta (220 kV line)"];
+const MONTHS=["Apr 2026","May 2026","Jun 2026"];
+const TRADES=["Erection","Foundation","Stringing"];
+const TR={Erection:{n:10,base:600,rate:180},Foundation:{n:8,base:240,rate:95},Stringing:{n:3,base:190,rate:455}};
+const gangs=[];PROJECTS.forEach((p,pi)=>Object.entries(TR).forEach(([t,c])=>{for(let i=1;i<=c.n-pi*2;i++)gangs.push({p,t,name:(pi?"B-":"A-")+t[0]+String(i).padStart(2,"0"),w:0.35+r()*1.3})}));
+const recs=[];
+gangs.forEach(g=>MONTHS.forEach((m,mi)=>{const c=TR[g.t];const md=Math.round(c.base*g.w*(0.7+r()*0.6)*(g.t==="Stringing"?1+mi*0.35:1-mi*0.12));
+ const out=g.t==="Stringing"?+(md/c.rate/(0.6+r()*1.2)).toFixed(3):Math.max(1,Math.round(md/c.rate*(0.8+r()*0.5)));
+ const sk=r()*0.25+0.1,us=r()*0.25+0.1,ss=r()*0.02;
+ recs.push({...g,m,md,out,cat:(()=>{const a=Math.round(md*sk),b=Math.round(md*us),c=Math.round(md*ss);return {"Not classified":md-a-b-c,"Skilled":a,"Unskilled":b,"Semi-skilled":c}})()})}));
+
+// ---------- helpers ----------
+const $=id=>document.getElementById(id);
+const DASH="—";
+const TCOL={Erection:"var(--s-prog)",Foundation:"var(--s-reop)",Stringing:"var(--s-app)"};
+const CATS=[["Skilled","var(--o5)"],["Semi-skilled","var(--o3)"],["Unskilled","var(--o1)"],["Not classified","var(--s-draft)"]];
+const nf=(v,d=0)=>v==null||!isFinite(v)?DASH:v.toLocaleString("en-IN",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=v=>v==null||!isFinite(v)?DASH:(Math.round(v*10)/10).toLocaleString("en-IN",{maximumFractionDigits:1})+"%";
+const short=m=>m.split(" ")[0];
+const km=(t,out,span)=>t==="Stringing"?out:out*span;
+const sum=(a,f)=>a.reduce((s,x)=>s+f(x),0);
+const rate=(a,t,span)=>{const k=sum(a,x=>km(t,x.out,span));return a.length&&k?sum(a,x=>x.md)/k:null};
+const ic={
+ down:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>',
+ up:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+ flat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/></svg>',
+ warn:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></svg>',
+ chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>',
+ moon:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+ sun:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>'};
+const KI={
+ users:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+ hat:'<path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5"/><path d="M14 6a6 6 0 0 1 6 6v3"/><path d="M4 15v-3a6 6 0 0 1 6-6"/><rect x="2" y="15" width="20" height="4" rx="1"/>',
+ route:'<circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/>',
+ Erection:'<path d="M7 22 11 3h2l4 19"/><path d="M4 7h16M6 12h12"/><path d="M9 17h6M8.5 12l6.5 10M15.5 12 9 22"/>',
+ Foundation:'<rect x="3" y="15" width="18" height="6" rx="1"/><path d="M7 15V10h10v5"/><path d="M10 10V4h4v6"/>',
+ Stringing:'<path d="M4 3v18M20 3v18"/><path d="M4 6q8 8 16 0"/><path d="M4 11q8 8 16 0"/>',
+ skill:'<circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4"/><path d="M16.5 14.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.4v.3"/><path d="M19 21.5h.01"/>'};
+const kh=(k,label,c)=>`<div class="kh"><span class="kic" aria-hidden="true"${c?` style="--c:${c}"`:""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${KI[k]}</svg></span><div class="kl">${label}</div></div>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+// ---------- filters ----------
+const opt=(el,arr,all)=>{el.innerHTML=(all?`<option value="">${all}</option>`:"")+arr.map(v=>`<option>${v}</option>`).join("")};
+opt($("fProject"),PROJECTS);opt($("fMonth"),MONTHS,"All months");
+const setGangs=()=>opt($("fGang"),gangs.filter(g=>g.p===$("fProject").value).map(g=>g.name),"All gangs");setGangs();
+$("tLegend").innerHTML=TRADES.map(t=>`<span><i class="dot" style="background:${TCOL[t]}"></i>${t}</span>`).join("");
+const open=new Set();
+
+function delta(now,prev,prevLabel){
+ if(now==null||prev==null)return "";
+ const d=(now-prev)/prev*100;
+ if(Math.abs(d)<0.5)return `<span class="chip">${ic.flat}No change vs ${prevLabel}</span>`;
+ const better=d<0; // lower man-days/km is better
+ return `<span class="chip ${better?"ok":"bad"}">${d<0?ic.down:ic.up}${pct(Math.abs(d))} ${better?"better":"worse"} vs ${prevLabel}</span>`;
+}
+
+function render(){
+ const P=$("fProject").value,G=$("fGang").value,M=$("fMonth").value,span=+$("fSpan").value||0.375;
+ const base=recs.filter(x=>x.p===P&&(!G||x.name===G));const cur=base.filter(x=>!M||x.m===M);
+ const mi=MONTHS.indexOf(M),prev=mi>0?base.filter(x=>x.m===MONTHS[mi-1]):null,prevL=mi>0?short(MONTHS[mi-1]):"";
+ const scope=(G?G:"this project")+(M?" in "+M:"");
+
+ // ---- KPIs
+ const tmd=sum(cur,x=>x.md),tkm=sum(cur,x=>km(x.t,x.out,span)),nc=sum(cur,x=>x.cat["Not classified"]);
+ const ncp=tmd?nc/tmd*100:null;
+ const tiles=[
+  `<div class="kpi">${kh("users","Man-days deployed")}<div class="kv">${cur.length?nf(tmd):DASH}</div></div>`,
+  `<div class="kpi">${kh("hat","Active gangs")}<div class="kv">${cur.length?nf(new Set(cur.map(x=>x.name)).size):DASH}</div></div>`,
+  `<div class="kpi">${kh("route","Line completed")}<div class="kv">${cur.length?nf(tkm,1):DASH}<small>km</small></div></div>`,
+  ...TRADES.map(t=>{const v=rate(cur.filter(x=>x.t===t),t,span),pv=prev?rate(prev.filter(x=>x.t===t),t,span):null;
+   return `<div class="kpi">${kh(t,t,TCOL[t])}<div class="kv">${nf(v,1)}</div><div class="ku">${v==null?"No output recorded":"man-days per km"}</div>${delta(v,pv,prevL)}</div>`}),
+  `<div class="kpi">${kh("skill","Skill not recorded",ncp!=null&&ncp>=25?"var(--warn)":"var(--s-draft)")}<div class="kv">${ncp==null?DASH:nf(ncp)+"<small>%</small>"}</div>${ncp!=null&&ncp>=25?`<span class="chip warn">${ic.warn}Data gap</span>`:ncp!=null?`<span class="chip ok">Well recorded</span>`:""}</div>`];
+ $("kpis").innerHTML=tiles.join("");
+
+ // ---- skill composition
+ if(!cur.length){$("cat").innerHTML=`<div class="empty">No man-days recorded for ${esc(scope)}.</div>`}
+ else{
+  const cv=CATS.map(([c,col])=>({c,col,v:sum(cur,x=>x.cat[c])})),mx=Math.max(...cv.map(x=>x.v));
+  $("cat").innerHTML=
+   `<div class="stack" role="img" aria-label="Skill mix of ${nf(tmd)} man-days">${cv.filter(x=>x.v>0).map(x=>`<div class="seg" tabindex="0" style="flex:${x.v};background:${x.col}" data-tip="<b>${x.c}</b><br>${nf(x.v)} man-days · ${pct(x.v/tmd*100)}"></div>`).join("")}</div>
+   <div class="rows">${cv.map(x=>`<div class="brow"><span class="lab"><i class="dot" style="background:${x.col}"></i>${x.c}</span>
+    <div class="track"><div class="seg" tabindex="0" style="width:${mx?x.v/mx*100:0}%;background:${x.col}" data-tip="<b>${x.c}</b><br>${nf(x.v)} man-days"></div></div>
+    <span class="val">${nf(x.v)}<em>${pct(x.v/tmd*100)}</em></span></div>`).join("")}</div>
+   <div class="subsec"><div class="cap">Skill mix by trade</div>
+    <div class="rows">${TRADES.map(t=>{const a=cur.filter(x=>x.t===t),md=sum(a,x=>x.md);
+     if(!md)return `<div class="brow tr"><span class="lab"><i class="dot" style="background:${TCOL[t]}"></i>${t}</span><span class="nil">No man-days in this selection</span><span class="val">${DASH}</span></div>`;
+     const rec=md-sum(a,x=>x.cat["Not classified"]);
+     return `<div class="brow tr"><span class="lab"><i class="dot" style="background:${TCOL[t]}"></i>${t}</span>
+      <div class="stack sm">${CATS.map(([c,col])=>{const v=sum(a,x=>x.cat[c]);return v?`<div class="seg" tabindex="0" style="flex:${v};background:${col}" data-tip="<b>${t} · ${c}</b><br>${nf(v)} man-days · ${pct(v/md*100)}"></div>`:""}).join("")}</div>
+      <span class="val">${pct(rec/md*100)}<em>recorded</em></span></div>`}).join("")}</div></div>
+   ${ncp>=25?`<div class="note">${ic.warn}<span><b>${pct(ncp)} of man-days have no skill level.</b> The field was left blank at entry, so the skill split above covers only the rest.</span></div>`:""}`;
+ }
+
+ // ---- gangs: top 8 bars, rest as chips
+ const gm={};cur.forEach(x=>{(gm[x.name]=gm[x.name]||{t:x.t,md:0}).md+=x.md});
+ const gl=Object.entries(gm).sort((a,b)=>b[1].md-a[1].md),top=gl.slice(0,8),rest=gl.slice(8),gmax=top.length?top[0][1].md:0;
+ $("gang").innerHTML=!gl.length?`<div class="empty">No gangs deployed for ${esc(scope)}.</div>`:
+  `<div class="rows">${top.map(([n,g])=>`<div class="brow"><span class="lab"><i class="dot" style="background:${TCOL[g.t]}"></i>${n}</span>
+   <div class="track"><div class="seg" tabindex="0" style="width:${g.md/gmax*100}%;background:${TCOL[g.t]}" data-tip="<b>${n}</b> · ${g.t}<br>${nf(g.md)} man-days · ${pct(g.md/tmd*100)} of total"></div></div>
+   <span class="val">${nf(g.md)}</span></div>`).join("")}</div>
+  ${rest.length?`<div class="more"><span class="cap">${rest.length} more gang${rest.length>1?"s":""}</span>${rest.map(([n,g])=>`<span class="chip"><i class="dot" style="background:${TCOL[g.t]}"></i>${n} <b>${nf(g.md)}</b></span>`).join("")}</div>`:""}`;
+
+ // ---- matrix
+ const ms=M?[M]:MONTHS,cols=[...ms,...(ms.length>1?["Total"]:[])];
+ const cell=(a,t)=>{if(!a.length)return `<td class="n first">${DASH}</td><td class="n">${DASH}</td><td class="n rate">${DASH}</td>`;
+  const md=sum(a,x=>x.md),o=sum(a,x=>x.out),v=rate(a,t,span);
+  return `<td class="n first">${nf(md)}</td><td class="n">${nf(o,t==="Stringing"?2:0)}<span class="unit">${t==="Stringing"?"km":"loc"}</span></td><td class="n rate">${nf(v,2)}</td>`};
+ const pick=(a,c)=>c==="Total"?a.filter(x=>ms.includes(x.m)):a.filter(x=>x.m===c);
+ let h=`<thead><tr><th class="sticky" rowspan="2" style="vertical-align:bottom">Trade / gang</th>${cols.map(c=>`<th class="mo" colspan="3">${c}</th>`).join("")}</tr>
+  <tr>${cols.map(()=>`<th class="first">Man-days</th><th>Output</th><th>Man-days / km</th>`).join("")}</tr></thead><tbody>`;
+ const present=TRADES.filter(t=>base.some(x=>x.t===t));
+ present.forEach(t=>{const a=base.filter(x=>x.t===t),names=[...new Set(a.map(x=>x.name))],isOpen=open.has(t);
+  h+=`<tr class="trade"><td class="sticky"><button class="tog" data-t="${t}" aria-expanded="${isOpen}" aria-label="${isOpen?"Hide":"Show"} ${names.length} gangs for ${t}"><span class="cv">${ic.chev}</span><i class="dot" style="background:${TCOL[t]}"></i>${t}<span class="unit">${names.length} gang${names.length>1?"s":""}</span></button></td>${cols.map(c=>cell(pick(a,c),t)).join("")}</tr>`;
+  if(isOpen)names.forEach(n=>{const b=a.filter(x=>x.name===n);h+=`<tr class="child"><td class="sticky">${n}</td>${cols.map(c=>cell(pick(b,c),t)).join("")}</tr>`})});
+ if(!present.length)h+=`<tr><td colspan="${1+cols.length*3}"><div class="empty">No trades recorded for ${esc(scope)}.</div></td></tr>`;
+ $("matrix").innerHTML=h+"</tbody>";
+ $("matrix").querySelectorAll("button.tog").forEach(b=>b.onclick=()=>{const t=b.dataset.t;open.has(t)?open.delete(t):open.add(t);render();$("matrix").querySelector(`button.tog[data-t="${t}"]`).focus()});
+ const allOpen=present.length&&present.every(t=>open.has(t));
+ $("expAll").textContent=allOpen?"Collapse all":"Expand all gangs";
+ $("expAll").onclick=()=>{present.forEach(t=>allOpen?open.delete(t):open.add(t));render()};
+}
+$("fProject").onchange=()=>{setGangs();render()};["fGang","fMonth","fSpan"].forEach(i=>$(i).addEventListener("input",render));
+
+// ---------- theme (light default, dark opt-in) ----------
+const tb=$("theme");
+tb.onclick=()=>{const d=document.documentElement.dataset.theme!=="dark";document.documentElement.dataset.theme=d?"dark":"light";
+ tb.innerHTML=d?ic.sun:ic.moon;tb.setAttribute("aria-pressed",d);tb.setAttribute("aria-label",d?"Switch to light theme":"Switch to dark theme")};
+
+// ---------- tooltip: hover + focus, Escape closes ----------
+const tip=$("tip");let tipEl=null;
+const show=el=>{tipEl=el;tip.innerHTML=el.dataset.tip;const b=el.getBoundingClientRect();
+ const x=Math.min(Math.max(b.left+b.width/2,130),innerWidth-130);tip.style.left=x+"px";tip.style.top=Math.max(b.top,60)+"px";tip.classList.add("on")};
+const hide=()=>{tip.classList.remove("on");tipEl=null};
+document.addEventListener("mouseover",e=>{const el=e.target.closest("[data-tip]");el?show(el):tipEl&&hide()});
+document.addEventListener("focusin",e=>{const el=e.target.closest("[data-tip]");el?show(el):hide()});
+document.addEventListener("focusout",hide);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&tipEl){const el=tipEl;hide();el.focus()}});
+addEventListener("scroll",hide,{passive:true});
+
+// ---------- measured sticky offset ----------
+new ResizeObserver(([e])=>document.documentElement.style.setProperty("--appbar-h",e.target.offsetHeight+"px")).observe($("appbar"));
+render();
+</script></body></html>

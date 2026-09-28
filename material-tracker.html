@@ -1,0 +1,434 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Material Readiness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#f5f6f8;--card:#ffffff;--ink:#2b3237;--muted:#626e76;--faint:#7e8c96;--line:#e0e5e9;--inset:#f4f6f9;--brand:#1793e6;--surface:#ffffff;
+--ok:#008344;--ok-bg:#e4fbf3;--warn:#c27d00;--warn-bg:#fef5e5;--inert:#626e76;--inert-bg:#eef1f4;--bad:#d13636;--bad-bg:#ffecec;
+--s-app:#008300;--s-draft:#6b7a86;--s-reop:#eda100;--s-prog:#2a78d6;--s-rej:#e34948;
+--o1:#86b6ef;--o2:#6da7ec;--o3:#3987e5;--o4:#256abf;--o5:#184f95;
+--tip-bg:#2b3237;--tip-ink:#f4f6f8;--shadow:0 1px 2px rgba(20,30,40,.05),0 2px 8px rgba(20,30,40,.04);
+--ease:cubic-bezier(.2,0,0,1);--r-lg:12px;--r-xl:16px;--r-2xl:22px;--appbar-h:0px;--logo-a:#15375a;--logo-b:#9ab6cd}
+:root[data-theme="dark"]{
+--bg:#0e1216;--card:#161b20;--ink:#f4f6f8;--muted:#c2ccd3;--faint:#99aab6;--line:#2d353d;--inset:#1b2127;--brand:#45a9eb;--surface:#161b20;
+--ok:#52c88f;--ok-bg:rgba(0,164,85,.16);--warn:#f9c566;--warn-bg:rgba(245,158,0,.16);--inert:#99aab6;--inert-bg:#232a31;--bad:#ff8e8e;--bad-bg:rgba(255,67,67,.16);
+--s-app:#2fa84f;--s-draft:#8595a2;--s-reop:#f2b632;--s-prog:#4a90e2;--s-rej:#ef6665;
+--o1:#a9cbf4;--o2:#86b6ef;--o3:#6da7ec;--o4:#3987e5;--o5:#256abf;
+--tip-bg:#f4f6f8;--tip-ink:#161b20;--shadow:none;--logo-a:#e6eef6;--logo-b:#9ab6cd}
+*{box-sizing:border-box}
+html{scroll-padding-top:var(--appbar-h)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 14px/1.45 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh}
+.num,td.n,.kv,.val{font-variant-numeric:tabular-nums}
+.wrap{max-width:1500px;margin:0 auto;padding:0 20px calc(28px + env(safe-area-inset-bottom,0px))}
+/* app bar */
+.appbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.appbar .in{max-width:1500px;margin:0 auto;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px}
+.brand{min-width:0}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)}
+h1{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:2px 0 0}
+.lede{font-size:12.5px;color:var(--muted);margin-top:2px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+select,input[type=number]{font:inherit;font-size:13.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;height:36px;padding:0 10px;min-width:140px;transition:border-color .12s var(--ease),box-shadow .12s var(--ease)}
+select{appearance:none;-webkit-appearance:none;padding-right:30px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237e8c96' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+#fProject{min-width:220px}#fSpan{min-width:110px;width:110px}
+select:hover,input:hover{border-color:var(--faint)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.iconbtn{height:36px;width:36px;display:grid;place-items:center;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:10px;cursor:pointer;transition:transform .12s var(--ease),color .12s var(--ease)}
+.iconbtn:hover{color:var(--ink)}.iconbtn:active{transform:scale(.985)}
+.iconbtn svg{width:16px;height:16px}
+.flexcol{display:flex;flex-direction:column}.grow{flex:1}
+.subsec{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}
+.subsec .cap,.more .cap{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:10px;display:block}
+.stack.sm{margin:0;height:14px}
+.brow.tr .val em{min-width:58px;text-align:left}
+.nil{font-size:12px;color:var(--faint)}
+#cat .note{margin-top:auto}#cat .subsec+.note{margin-top:max(16px,auto)}
+#cat>.note{margin-top:16px}
+.note b{font-weight:600}
+/* logo */
+.logo{display:flex;align-items:center;gap:9px;padding-right:18px;margin-right:18px;border-right:1px solid var(--line);align-self:center;text-decoration:none}
+.logo svg{height:30px;width:auto;display:block}
+.logo .wm{display:flex;flex-direction:column;line-height:1}
+.logo .wm b{font:700 17px/1 "Montserrat","Inter",sans-serif;letter-spacing:.06em;color:var(--logo-a)}
+.logo .wm b span{color:var(--logo-b)}
+.logo .wm i{font:500 8.5px/1 "Montserrat","Inter",sans-serif;font-style:normal;color:var(--logo-a);margin-top:4px;padding-top:3px;border-top:1px solid var(--logo-a);letter-spacing:.02em}
+.brandrow{display:flex;align-items:center;margin-right:auto;min-width:0}
+@media (max-width:760px){.logo{padding-right:12px;margin-right:12px}.logo .wm{display:none}.logo svg{height:34px}}
+/* sections */
+.sec{margin-top:26px}
+.hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 12px}
+.hd h2{font-size:14.5px;font-weight:600;letter-spacing:-.01em;margin:0}
+.hd p{font-size:12px;color:var(--muted);margin:0}
+.hd .right{margin-left:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);padding:18px 20px;box-shadow:var(--shadow);min-width:0}
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px 13px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;min-width:0}
+.kh{display:flex;align-items:center;gap:10px;margin-bottom:4px;min-width:0}
+.kic{--c:var(--brand);width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 18%,transparent)}
+.kic svg{width:18px;height:18px}
+.kpi{transition:border-color .12s var(--ease)}.kpi:hover{border-color:color-mix(in srgb,var(--faint) 60%,var(--line))}
+.kh .kl{line-height:1.25}
+.ku{font-size:11.5px;color:var(--faint);margin-top:-2px}
+.kv small{white-space:nowrap}
+.kv{font-size:26px;font-weight:600;letter-spacing:-.03em;line-height:1}
+.kv small{font-size:12px;font-weight:500;letter-spacing:0;color:var(--faint);margin-left:3px}
+.kl{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.chip{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;font-size:11px;font-weight:500;line-height:1;padding:4px 7px;border-radius:999px;background:var(--inert-bg);color:var(--inert);white-space:nowrap}
+.chip svg{width:11px;height:11px}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}.chip.bad{background:var(--bad-bg);color:var(--bad)}.chip.warn{background:var(--warn-bg);color:var(--warn)}
+/* two-up */
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(390px,1fr));gap:16px}
+@media (max-width:760px){.row2{grid-template-columns:1fr}}
+/* bars */
+.stack{display:flex;gap:2px;height:14px;border-radius:4px;overflow:hidden;background:var(--inset);margin:4px 0 16px}
+.seg{height:100%;transition:filter .12s var(--ease);cursor:default;min-width:2px}
+.seg:hover,.seg:focus-visible{filter:brightness(1.12)}
+.seg:focus-visible{outline-offset:1px}
+.rows{display:flex;flex-direction:column;gap:10px}
+.brow{display:grid;grid-template-columns:110px minmax(0,1fr) 104px;align-items:center;gap:12px;font-size:13px}
+.brow .lab{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.track{height:14px;background:var(--inset);border-radius:4px;overflow:hidden}
+.track .seg{border-radius:4px}
+.val{font-size:13px;font-weight:500;text-align:right;white-space:nowrap;min-width:52px}
+.val em{font-style:normal;color:var(--faint);font-weight:400;margin-left:6px;display:inline-block;min-width:38px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.more{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.more .cap{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);width:100%;margin-bottom:2px}
+.more .chip{font-size:11.5px;padding:5px 8px;background:var(--inset);color:var(--ink)}
+.more .chip b{font-weight:500;color:var(--muted)}
+.note{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--warn);background:var(--warn-bg);border-radius:10px;padding:8px 10px;margin-top:14px}
+.note svg{width:14px;height:14px;flex:none;margin-top:1px}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:28px 12px;background:var(--inset);border-radius:var(--r-lg)}
+/* table */
+.tblcard{padding:0;overflow:hidden}
+.scrollx{overflow-x:auto;max-width:100%}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:right;padding:10px 12px;background:var(--inset);border-bottom:1px solid var(--line);white-space:nowrap}
+th.mo{text-align:center;color:var(--ink);letter-spacing:.05em;border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+th.first{border-left:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.n{text-align:right}
+td.first{border-left:1px solid var(--line)}
+th.sticky,td.sticky{position:sticky;left:0;z-index:2;text-align:left;background:var(--card);box-shadow:1px 0 0 var(--line)}
+th.sticky{background:var(--inset);z-index:3}
+tr.trade td{font-weight:600}
+tr.trade td.sticky{background:var(--card)}
+tr.child td{color:var(--muted);background:color-mix(in srgb,var(--inset) 55%,var(--card))}
+tr.child td.sticky{padding-left:44px;background:color-mix(in srgb,var(--inset) 55%,var(--card))}
+tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--inset)}
+td.rate{font-weight:600;color:var(--ink)}
+tr.child td.rate{font-weight:500}
+.unit{color:var(--faint);font-weight:400;margin-left:3px;font-size:11.5px}
+.tog{font:inherit;display:inline-flex;align-items:center;gap:8px;background:none;border:0;color:inherit;padding:0;cursor:pointer;font-weight:600}
+.tog .cv{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;border:1px solid var(--line);background:var(--card);color:var(--muted);transition:transform .12s var(--ease)}
+.tog .cv svg{width:12px;height:12px;transition:transform .2s var(--ease)}
+.tog[aria-expanded="true"] .cv svg{transform:rotate(90deg)}
+.tog:active .cv{transform:scale(.97)}
+.textbtn{font:inherit;font-size:12px;font-weight:500;color:var(--brand);background:none;border:0;padding:4px 2px;cursor:pointer}
+.textbtn:hover{text-decoration:underline}
+.formula{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--line);background:var(--card)}
+.formula b{color:var(--ink);font-weight:600}
+.foot{font-size:11.5px;color:var(--faint);margin-top:18px}
+/* tooltip */
+#tip{position:fixed;z-index:9999;pointer-events:none;background:var(--tip-bg);color:var(--tip-ink);font-size:12px;line-height:1.35;padding:7px 9px;border-radius:8px;max-width:240px;opacity:0;transform:translate(-50%,calc(-100% - 8px)) scale(.98);transition:opacity .09s var(--ease),transform .09s var(--ease)}
+#tip.on{opacity:1;transform:translate(-50%,calc(-100% - 8px))}
+#tip b{font-weight:600}
+@media (max-width:760px){
+ .wrap{padding:0 14px calc(24px + env(safe-area-inset-bottom,0px))}
+ .appbar .in{padding:12px 14px}
+ .filters{width:100%}.fld{flex:1 1 140px}
+ select,input[type=number]{font-size:16px;width:100%;min-width:0}#fProject,#fSpan{min-width:0;width:100%}
+ .brow{grid-template-columns:84px minmax(0,1fr) 96px;gap:10px}
+ .card{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+.mini{height:6px;border-radius:3px;background:var(--inset);overflow:hidden;margin-top:6px}
+.mini>i{display:block;height:100%;background:var(--brand);border-radius:3px}
+/* ---- material tracker additions ---- */
+input[type=date]{font:inherit;font-size:13.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;height:36px;padding:0 10px;min-width:150px;color-scheme:light}
+:root[data-theme="dark"] input[type=date]{color-scheme:dark}
+.ksub{font-size:11.5px;color:var(--faint)}
+.chip.info{background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--brand)}
+/* pipeline */
+.pipe{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;position:relative}
+@media (max-width:1100px){.pipe{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}}
+.stg{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;min-width:0}
+.stg:not(:last-child)::after{content:"";position:absolute;right:-11px;top:50%;width:10px;height:10px;border-top:2px solid var(--line);border-right:2px solid var(--line);transform:translateY(-50%) rotate(45deg);z-index:1;background:transparent}
+@media (max-width:1100px){.stg::after{display:none}}
+.stg .top{display:flex;align-items:center;gap:8px}
+.stg .no{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:600;background:var(--inset);color:var(--muted);flex:none}
+.stg .no.done{background:var(--ok-bg);color:var(--ok)}
+.stg h3{font-size:13px;font-weight:600;margin:0;line-height:1.25;letter-spacing:-.005em}
+.stg .big{display:flex;align-items:baseline;gap:6px}
+.stg .big b{font-size:26px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.stg .big span{font-size:11.5px;color:var(--faint)}
+.sbar{display:flex;gap:2px;height:10px;border-radius:4px;overflow:hidden;background:var(--inset)}
+.sbar i{display:block;height:100%}
+.cnts{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;color:var(--muted)}
+.cnts span{display:inline-flex;align-items:center;gap:5px;font-variant-numeric:tabular-nums}
+.sq{width:8px;height:8px;border-radius:2px;display:inline-block}
+/* action lists */
+.alist{display:flex;flex-direction:column}
+.ai{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.ai:last-child{border-bottom:0}
+.ai .t{font-size:13px;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ai .t em{font-style:normal;color:var(--brand);font-weight:600;margin-right:6px}
+.ai .m{font-size:11.5px;color:var(--faint);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;grid-column:1}
+.ai .chip{grid-row:1 / span 2;grid-column:2;align-self:center}
+.ai .d{font-size:11.5px;color:var(--muted);text-align:right;grid-column:2;display:none}
+.morebtn{margin-top:10px;align-self:flex-start}
+/* table */
+.seg-ctl{display:inline-flex;background:var(--inset);border:1px solid var(--line);border-radius:10px;padding:2px;gap:2px}
+.seg-ctl button{font:inherit;font-size:12px;font-weight:500;border:0;background:none;color:var(--muted);padding:5px 12px;border-radius:8px;cursor:pointer;transition:background .12s var(--ease),color .12s var(--ease);display:inline-flex;gap:6px;align-items:center}
+.seg-ctl button b{font-weight:600;font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+.seg-ctl button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg-ctl button:active{transform:scale(.985)}
+.tbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 16px;border-bottom:1px solid var(--line)}
+.tbar .lgd{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:11.5px;color:var(--muted);margin-left:auto}
+.tbar .lgd span{display:inline-flex;align-items:center;gap:5px}
+.card.tblcard{padding:0}
+#tbl th{text-align:left}
+#tbl th.c{text-align:center}
+#tbl td{vertical-align:middle}
+tr.grp td{background:var(--inset);padding:9px 12px;border-bottom:1px solid var(--line)}
+tr.grp td.sticky{background:var(--inset)}
+tr.grp .tog{font-weight:600;font-size:13px}
+tr.grp .wt{color:var(--muted);font-weight:400;margin-left:8px;font-size:12px}
+tr.grp .cntx{font-size:11.5px;color:var(--faint);margin-left:10px;font-weight:400}
+tr.grp .chip{margin-left:8px;vertical-align:1px}
+.tog{font:inherit;display:inline-flex;align-items:center;gap:8px;background:none;border:0;color:inherit;padding:0;cursor:pointer}
+.tog .cv{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.tog .cv svg{width:12px;height:12px;transition:transform .2s var(--ease)}
+.tog[aria-expanded="true"] .cv svg{transform:rotate(90deg)}
+td.loc{font-weight:500}
+td.loc small{display:block;font-size:11.5px;color:var(--faint);font-weight:400}
+td.scope{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+td.scope small{font-weight:400;color:var(--faint);margin-left:3px;font-size:11px}
+.sc{display:flex;flex-direction:column;gap:3px;min-width:112px}
+.pill{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;font-size:11px;font-weight:600;line-height:1;padding:4px 7px 4px 6px;border-radius:999px;white-space:nowrap}
+.pill svg{width:11px;height:11px}
+.pill.ok{background:var(--ok-bg);color:var(--ok)}.pill.warn{background:var(--warn-bg);color:var(--warn)}.pill.bad{background:var(--bad-bg);color:var(--bad)}
+.sc .meta{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.sc .meta.late{color:var(--bad);font-weight:500}
+.sc .meta.late svg{width:11px;height:11px;vertical-align:-1px;margin-right:2px}
+td.na{color:var(--faint);text-align:center}
+td.stc{border-left:1px solid var(--line)}
+.next{display:flex;flex-direction:column;gap:2px;min-width:150px}
+.next b{font-size:12.5px;font-weight:600}
+.next span{font-size:11.5px;color:var(--muted)}
+.next.late span{color:var(--bad);font-weight:500}
+.next.done b{color:var(--ok)}
+.blk{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--warn);margin-top:2px}
+.blk svg{width:11px;height:11px}
+tbody tr:not(.grp):hover td{background:color-mix(in srgb,var(--inset) 60%,var(--card))}
+td.emptycell{padding:0}
+</style></head><body>
+</head><body>
+<header class="appbar" id="appbar"><div class="in">
+ <div class="brandrow"><a class="logo" href="#" aria-label="VisiLean — Construction, simplified">
+  <svg viewBox="0 0 640 490" aria-hidden="true"><polygon fill="var(--logo-b)" points="165,122 238,0 480,88 242,490"/><polygon fill="var(--logo-a)" points="0,62 242,150 242,490 0,405"/><polygon fill="var(--logo-a)" points="480,88 480,425 315,368"/><polygon fill="var(--logo-b)" points="480,295 638,350 480,425"/></svg>
+  <span class="wm"><b>VISI<span>LEAN</span></b><i>Construction, simplified</i></span></a>
+ <div class="brand">
+  <div class="eyebrow">VisiLean · Materials</div>
+  <h1>Material readiness</h1>
+  <div class="lede">From purchase request to execution, by resource, contractor and location</div>
+ </div></div>
+ <div class="filters">
+  <label class="fld">Resource<select id="fRes"></select></label>
+  <label class="fld">Contractor<select id="fCon"></select></label>
+  <label class="fld" title="Stages whose forecast date is before this date and are not complete count as overdue">Status date<input type="date" id="fDate"></label>
+  <button class="iconbtn" id="theme" aria-pressed="false" aria-label="Switch to dark theme"></button>
+ </div>
+</div></header>
+
+<main class="wrap">
+ <div class="kpis" id="kpis" aria-live="polite"></div>
+
+ <section class="sec" aria-labelledby="hPipe">
+  <div class="hd"><h2 id="hPipe">Readiness pipeline</h2><p>Average quantity progress at each stage, and how many lines are complete, started or not ready</p></div>
+  <div class="pipe" id="pipe"></div>
+ </section>
+
+ <div class="row2 sec">
+  <section class="card flexcol" aria-labelledby="hLate">
+   <div class="hd"><h2 id="hLate">Overdue stages</h2><p>Forecast date has passed and the stage is not complete</p></div>
+   <div id="late" class="flexcol grow"></div>
+  </section>
+  <section class="card flexcol" aria-labelledby="hNext">
+   <div class="hd"><h2 id="hNext">Due in the next 30 days</h2><p>Stages still to complete, soonest first</p></div>
+   <div id="soon" class="flexcol grow"></div>
+  </section>
+ </div>
+
+ <section class="sec" aria-labelledby="hT" id="tsec">
+  <div class="hd"><h2 id="hT">Stage status by resource and location</h2><p>Status comes from quantities — complete when actual reaches scope</p></div>
+  <div class="card tblcard">
+   <div class="tbar">
+    <div class="seg-ctl" role="group" aria-label="Show rows" id="fShow"></div>
+    <div class="lgd" id="lgd"></div>
+   </div>
+   <div class="scrollx"><table id="tbl"></table></div>
+   <div class="formula">
+    <span><b>Complete</b> — actual ≥ scope</span><span><b>Started</b> — some quantity, below scope</span><span><b>Not ready</b> — nothing yet</span>
+    <span><b>Blocked</b> — previous stage complete, this one not started</span><span><b>—</b> stage not applicable</span><span>Dates are forecasts; for completed stages, the completion date</span>
+   </div>
+  </div>
+ </section>
+ <p class="foot">Sample data for illustration. Resources, contractors and locations are placeholders.</p>
+</main>
+<div id="tip" role="tooltip"></div>
+<script>
+const STAGES=["PR","PO","MDCC","Material receipt at site","Execution"];
+const FULL={"PR":"Purchase request","PO":"Purchase order","MDCC":"Dispatch clearance (MDCC)","Material receipt at site":"Material receipt at site","Execution":"Execution"};
+// [resource, work type, contractor, location, uom, scope, [qty,date]x5 | null]
+const D=[
+["Power transformer","Transformer erection","Contractor A","Location 1 to 6","Nos",6,[6,"2026-01-06"],[6,"2026-01-19"],[6,"2026-04-24"],[6,"2026-05-11"],[0,"2026-10-20"]],
+["Power transformer","Transformer erection","Contractor A","Location 7 to 12","Nos",6,[6,"2026-01-06"],[6,"2026-01-19"],[6,"2026-05-09"],[2,"2026-10-05"],[0,"2026-11-10"]],
+["Power transformer","Transformer erection","Contractor A","Location 13 to 19","Nos",7,[7,"2026-01-06"],[7,"2026-01-19"],[0,"2026-09-15"],[0,"2026-10-10"],[0,"2026-11-25"]],
+["Conductor type A","Line stringing","Contractor B","Feeder 2","KM",31,null,null,null,null,[0,"2026-12-05"]],
+["Conductor type A","Line stringing","Contractor B","Feeder 2","Nos",98,[98,"2026-01-01"],[98,"2026-01-13"],[0,"2026-09-30"],[0,"2026-10-20"],null],
+["Conductor type A","Line stringing","Contractor B","Feeder 3","KM",10,null,null,null,null,[0,"2026-12-10"]],
+["Conductor type A","Line stringing","Contractor B","Feeder 3","Nos",45,[45,"2026-01-01"],[45,"2026-01-13"],[0,"2026-09-30"],[0,"2026-10-20"],null],
+["Conductor type B","Line stringing","Contractor B","Feeder 4","KM",12,null,null,null,null,[6,"2026-10-30"]],
+["Conductor type B","Line stringing","Contractor B","Feeder 4","Nos",75,[75,"2026-01-01"],[75,"2026-03-11"],[75,"2026-03-11"],[75,"2026-03-28"],null],
+["Conductor type B","Line stringing","Contractor B","Feeder 1","KM",9,null,null,null,null,[0,"2026-12-15"]],
+["Conductor type B","Line stringing","Contractor B","Feeder 1","Nos",30,[30,"2026-01-01"],[30,"2026-01-13"],[0,"2026-10-08"],[0,"2026-10-28"],null],
+["Switchgear panel","Panel erection","Contractor C","Location 1 to 6","Nos",6,[6,"2026-01-06"],[6,"2026-01-19"],[0,"2026-09-18"],[0,"2026-10-08"],[0,"2026-11-05"]],
+["Switchgear panel","Panel erection","Contractor C","Location 7 to 12","Nos",6,[6,"2026-01-06"],[6,"2026-01-19"],[0,"2026-10-02"],[0,"2026-10-22"],[0,"2026-11-20"]],
+["Switchgear panel","Panel erection","Contractor C","Location 13 to 19","Nos",7,[7,"2026-01-06"],[7,"2026-01-19"],[0,"2026-10-12"],[0,"2026-11-02"],[0,"2026-12-01"]],
+["Foundation steel (vendor 1)","Steel reinforcement","Contractor D","Location 11 to 19","Nos",6,null,null,null,null,[6,"2026-05-09"]],
+["Foundation steel (vendor 1)","Steel reinforcement","Contractor D","Location 11 to 19","Sets",9,[6,"2026-09-10"],[6,"2026-09-20"],[6,"2026-10-05"],[6,"2026-10-15"],null],
+["Foundation steel (vendor 1)","Steel reinforcement","Contractor D","Location 5 to 10","Nos",5,null,null,null,null,[5,"2026-03-29"]],
+["Foundation steel (vendor 1)","Steel reinforcement","Contractor D","Location 5 to 10","Sets",6,[6,"2026-01-07"],[6,"2026-01-16"],[6,"2026-02-07"],[6,"2026-02-18"],null],
+["Foundation steel (vendor 1)","Steel reinforcement","Contractor E","Location 1 to 4","Nos",5,null,null,null,null,[5,"2026-03-18"]],
+["Foundation steel (vendor 1)","Steel reinforcement","Contractor E","Location 1 to 4","Sets",4,[4,"2025-12-19"],[4,"2025-12-27"],[4,"2026-01-18"],[4,"2026-01-30"],null],
+["Foundation steel (vendor 2)","Steel reinforcement","Contractor D","Location 20 to 29","Nos",6,null,null,null,null,[0,"2026-11-15"]],
+["Foundation steel (vendor 2)","Steel reinforcement","Contractor D","Location 20 to 29","Sets",10,[8,"2026-09-28"],[8,"2026-10-06"],[8,"2026-10-14"],[4,"2026-10-20"],null],
+["Optical fibre cable","SCADA cable laying","Contractor F","Feeder 4","KM",12,[12,"2026-01-03"],[12,"2026-01-13"],[12,"2026-05-01"],[0,"2026-09-12"],[0,"2026-11-10"]],
+["Optical fibre cable","SCADA cable laying","Contractor F","Feeder 1","KM",9,[9,"2026-01-03"],[9,"2026-01-13"],[9,"2026-05-01"],[0,"2026-10-05"],[0,"2026-11-20"]],
+["Optical fibre cable","SCADA cable laying","Contractor F","Feeder 2","KM",31,[31,"2026-01-03"],[31,"2026-01-13"],[31,"2026-05-01"],[0,"2026-10-05"],[0,"2026-12-05"]],
+["Optical fibre cable","SCADA cable laying","Contractor F","Feeder 3","KM",10,[10,"2026-01-03"],[10,"2026-01-13"],[10,"2026-05-01"],[0,"2026-10-12"],[0,"2026-11-25"]],
+["Pole","Pole erection with fabrication","Contractor G","Feeder 4","KM",12,null,null,null,null,[9,"2026-10-10"]],
+["Pole","Pole erection with fabrication","Contractor G","Feeder 4","Nos",480,[480,"2026-01-03"],[480,"2026-01-13"],[480,"2026-02-21"],[480,"2026-03-09"],null],
+["Pole","Pole erection with fabrication","Contractor G","Feeder 1","KM",9,null,null,null,null,[0,"2026-11-30"]],
+["Pole","Pole erection with fabrication","Contractor G","Feeder 1","Nos",180,[180,"2026-01-03"],[180,"2026-01-13"],[0,"2026-09-20"],[0,"2026-10-10"],null],
+["Pole","Pole erection with fabrication","Contractor G","Feeder 2","KM",31,null,null,null,null,[0,"2026-12-10"]],
+["Pole","Pole erection with fabrication","Contractor G","Feeder 2","Nos",620,[496,"2026-10-01"],[496,"2026-10-10"],[496,"2026-10-20"],[496,"2026-10-30"],null]];
+
+const SHORT={"PR":"PR","PO":"PO","MDCC":"MDCC","Material receipt at site":"Receipt at site","Execution":"Execution"};
+const $=id=>document.getElementById(id),DASH="—";
+const svgI=(p,w=2)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ic={moon:svgI('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'),sun:svgI('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+ ok:svgI('<path d="M20 6 9 17l-5-5"/>',2.5),half:svgI('<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/>'),none:svgI('<circle cx="12" cy="12" r="9"/><path d="M8 12h8"/>'),
+ clock:svgI('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),lock:svgI('<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'),
+ chev:svgI('<path d="m9 6 6 6-6 6"/>',2.5),warn:svgI('<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>')};
+const KI={lines:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+ truck:'<path d="M10 17h4V5H2v12h3"/><path d="M14 8h4l4 4v5h-3"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="16.5" cy="17.5" r="2.5"/>',
+ exec:'<path d="M2 20h20"/><path d="M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/>',
+ late:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/>',
+ lock:'<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+ cal:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 15h3"/>'};
+const kh=(k,label,c)=>`<div class="kh"><span class="kic" aria-hidden="true"${c?` style="--c:${c}"`:""}>${svgI(KI[k])}</span><div class="kl">${label}</div></div>`;
+const SC={"Complete":{c:"ok",i:"ok",col:"var(--ok)"},"Started":{c:"warn",i:"half",col:"var(--s-reop)"},"Not ready":{c:"bad",i:"none",col:"var(--s-rej)"}};
+const pill=s=>`<span class="pill ${SC[s].c}">${ic[SC[s].i]}${s}</span>`;
+const nf=v=>v.toLocaleString("en-IN");
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const fmt=d=>{const[y,m,dd]=d.split("-");return `${+dd} ${MON[m-1]} ${y.slice(2)}`};
+const fmtL=d=>{const[y,m,dd]=d.split("-");return `${+dd} ${MON[m-1]} ${y}`};
+const days=(a,b)=>Math.round((new Date(a)-new Date(b))/864e5);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const opt=(el,a,all)=>el.innerHTML=`<option value="">${all}</option>`+[...new Set(a)].map(v=>`<option>${v}</option>`).join("");
+opt($("fRes"),D.map(d=>d[0]),"All resources");opt($("fCon"),D.map(d=>d[2]),"All contractors");const STATUS="2026-09-25";$("fDate").value=STATUS;
+const status=(q,scope)=>q>=scope?"Complete":q>0?"Started":"Not ready";
+let show="",closed=new Set();
+$("lgd").innerHTML=Object.keys(SC).map(pill).join("")+`<span class="pill bad" style="background:none;padding-left:0">${ic.clock}Overdue date</span>`;
+
+function render(){
+ const dd=$("fDate").value||STATUS,R=$("fRes").value,C=$("fCon").value;
+ const all=D.map((d,id)=>{const st=d.slice(6).map(x=>x&&{q:x[0],dt:x[1],s:status(x[0],d[5])});
+   st.forEach(x=>x&&(x.late=x.s!=="Complete"&&x.dt<dd));
+   const block=st.some((x,i)=>x&&x.s==="Not ready"&&st.slice(0,i).filter(Boolean).slice(-1)[0]?.s==="Complete");
+   const ni=st.findIndex(x=>x&&x.s!=="Complete");
+   return {id,d,st,late:st.some(x=>x&&x.late),block,ni}}).filter(x=>(!R||x.d[0]===R)&&(!C||x.d[2]===C));
+ const rows=all.filter(x=>!show||(show==="late"?x.late:x.block));
+ const scopeTxt=[R,C].filter(Boolean).join(" · ")||"these filters";
+
+ // ---- KPIs (on resource/contractor filter)
+ const stages=all.flatMap(x=>x.st.map((s,i)=>s&&{...s,i,x}).filter(Boolean));
+ const lateS=stages.filter(s=>s.late),soonS=stages.filter(s=>s.s!=="Complete"&&s.dt>=dd&&days(s.dt,dd)<=30);
+ const avg=i=>{const a=all.filter(x=>x.st[i]);return a.length?a.reduce((t,x)=>t+Math.min(x.st[i].q,x.d[5])/x.d[5],0)/a.length*100:null};
+ const rc=avg(3),ex=avg(4),exA=all.filter(x=>x.st[4]),exC=exA.filter(x=>x.st[4].s==="Complete").length;
+ const rcA=all.filter(x=>x.st[3]),rcC=rcA.filter(x=>x.st[3].s==="Complete").length;
+ const fp=v=>v==null?DASH:Math.round(v)+"<small>%</small>";
+ $("kpis").innerHTML=[
+  `<div class="kpi">${kh("lines","Lines tracked")}<div class="kv">${all.length}</div><div class="ksub">${new Set(all.map(x=>x.d[0])).size} resources · ${new Set(all.map(x=>x.d[2])).size} contractors</div></div>`,
+  `<div class="kpi">${kh("truck","Material at site")}<div class="kv">${fp(rc)}</div><div class="mini"><i style="width:${rc||0}%;background:var(--ok)"></i></div><div class="ksub">${rcC} of ${rcA.length} lines fully received</div></div>`,
+  `<div class="kpi">${kh("exec","Execution")}<div class="kv">${fp(ex)}</div><div class="mini"><i style="width:${ex||0}%"></i></div><div class="ksub">${exC} of ${exA.length} lines complete</div></div>`,
+  `<div class="kpi">${kh("late","Overdue stages",lateS.length?"var(--bad)":"var(--ok)")}<div class="kv">${lateS.length}</div><div class="ksub">across ${all.filter(x=>x.late).length} lines</div>${lateS.length?`<span class="chip bad">${ic.clock}Needs action</span>`:`<span class="chip ok">${ic.ok}Nothing overdue</span>`}</div>`,
+  `<div class="kpi">${kh("lock","Blocked lines",all.some(x=>x.block)?"var(--warn)":null)}<div class="kv">${all.filter(x=>x.block).length}</div><div class="ksub">Previous stage done, next not started</div></div>`,
+  `<div class="kpi">${kh("cal","Due in 30 days")}<div class="kv">${soonS.length}</div><div class="ksub">stages by ${fmtL(new Date(new Date(dd).getTime()+30*864e5).toISOString().slice(0,10))}</div></div>`].join("");
+
+ // ---- pipeline
+ $("pipe").innerHTML=STAGES.map((sg,i)=>{const a=all.filter(x=>x.st[i]).map(x=>x.st[i]),n=a.length;
+  const c=a.filter(o=>o.s==="Complete").length,s=a.filter(o=>o.s==="Started").length,nr=n-c-s,late=a.filter(o=>o.late).length,qp=avg(i);
+  return `<div class="stg"><div class="top"><span class="no${n&&c===n?" done":""}">${n&&c===n?ic.ok:i+1}</span><h3>${FULL[sg]}</h3></div>
+   <div class="big"><b>${qp==null?DASH:Math.round(qp)+"%"}</b><span>${n?`avg progress · ${n} lines`:"no lines"}</span></div>
+   <div class="sbar" role="img" aria-label="${c} complete, ${s} started, ${nr} not ready">${[[c,"Complete"],[s,"Started"],[nr,"Not ready"]].map(([v,k])=>v?`<i tabindex="0" style="flex:${v};background:${SC[k].col}" data-tip="<b>${FULL[sg]}</b><br>${v} ${k.toLowerCase()}"></i>`:"").join("")}</div>
+   <div class="cnts"><span><i class="sq" style="background:var(--ok)"></i>${c} complete</span><span><i class="sq" style="background:var(--s-reop)"></i>${s} started</span><span><i class="sq" style="background:var(--s-rej)"></i>${nr} not ready</span></div>
+   ${late?`<span class="chip bad">${ic.clock}${late} overdue</span>`:n?`<span class="chip ok">${ic.ok}On schedule</span>`:""}</div>`}).join("");
+
+ // ---- action lists (top 8)
+ const item=(s,chip)=>`<div class="ai"><div class="t" title="${esc(FULL[STAGES[s.i]]+" · "+s.x.d[0])}"><em>${SHORT[STAGES[s.i]]}</em>${esc(s.x.d[0])}</div><div class="m">${esc(s.x.d[2])} · ${esc(s.x.d[3])} · ${nf(s.q)} of ${nf(s.x.d[5])} ${s.x.d[4]}</div>${chip}</div>`;
+ const lateSorted=[...lateS].sort((a,b)=>a.dt.localeCompare(b.dt));
+ $("late").innerHTML=!lateSorted.length?`<div class="empty">No overdue stages for ${esc(scopeTxt)} on ${fmtL(dd)}.</div>`:
+  `<div class="alist">${lateSorted.slice(0,8).map(s=>item(s,`<span class="chip bad" title="Forecast ${fmtL(s.dt)}">${ic.clock}${days(dd,s.dt)} d late</span>`)).join("")}</div>
+   ${lateSorted.length>8?`<button class="textbtn morebtn" data-go="late">+${lateSorted.length-8} more — show overdue lines</button>`:`<button class="textbtn morebtn" data-go="late">Show overdue lines in the table</button>`}`;
+ const soonSorted=[...soonS].sort((a,b)=>a.dt.localeCompare(b.dt));
+ $("soon").innerHTML=!soonSorted.length?`<div class="empty">Nothing due in the next 30 days for ${esc(scopeTxt)}.</div>`:
+  `<div class="alist">${soonSorted.slice(0,8).map(s=>{const d=days(s.dt,dd);return item(s,`<span class="chip ${d<=7?"warn":"info"}" title="Forecast ${fmtL(s.dt)}">${ic.clock}${d===0?"Today":fmt(s.dt).slice(0,-3)+" · "+d+" d"}</span>`)}).join("")}</div>
+   ${soonSorted.length>8?`<span class="ksub" style="margin-top:10px">+${soonSorted.length-8} more due in this window</span>`:""}`;
+ document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>{show=b.dataset.go;render();$("tsec").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"})});
+
+ // ---- segmented filter
+ const cnt={"":all.length,late:all.filter(x=>x.late).length,block:all.filter(x=>x.block).length};
+ $("fShow").innerHTML=[["","All lines"],["late","Overdue"],["block","Blocked"]].map(([k,l])=>`<button data-s="${k}" aria-pressed="${show===k}">${l}<b>${cnt[k]}</b></button>`).join("");
+ $("fShow").querySelectorAll("button").forEach(b=>b.onclick=()=>{show=b.dataset.s;render()});
+
+ // ---- table, grouped by resource
+ let h=`<thead><tr><th class="sticky">Contractor · location</th><th style="text-align:right">Scope</th><th>Next step</th>${STAGES.map(s=>`<th class="stc" title="${FULL[s]}">${SHORT[s]}</th>`).join("")}</tr></thead><tbody>`;
+ const groups=[...new Set(rows.map(x=>x.d[0]))];
+ groups.forEach(gname=>{const g=rows.filter(x=>x.d[0]===gname),isOpen=!closed.has(gname),gl=g.filter(x=>x.late).length,gb=g.filter(x=>x.block).length;
+  h+=`<tr class="grp"><td class="sticky" colspan="${3+STAGES.length}"><button class="tog" data-g="${esc(gname)}" aria-expanded="${isOpen}"><span class="cv">${ic.chev}</span>${esc(gname)}</button><span class="wt">${esc(g[0].d[1])}</span><span class="cntx">${g.length} line${g.length>1?"s":""}</span>${gl?`<span class="chip bad">${ic.clock}${gl} overdue</span>`:""}${gb?`<span class="chip warn">${ic.lock}${gb} blocked</span>`:""}</td></tr>`;
+  if(isOpen)g.forEach(x=>{const d=x.d;
+   const n=x.ni<0?`<div class="next done"><b>${ic.ok.replace('<svg','<svg style="width:12px;height:12px;vertical-align:-1px"')} All stages complete</b></div>`
+    :(()=>{const s=x.st[x.ni],late=s.late;return `<div class="next${late?" late":""}"><b>${FULL[STAGES[x.ni]]}</b><span>${late?`${days(dd,s.dt)} d overdue · was due ${fmt(s.dt)}`:`due ${fmt(s.dt)} · in ${days(s.dt,dd)} d`}</span>${x.block?`<span class="blk">${ic.lock}Blocked</span>`:""}</div>`})();
+   h+=`<tr><td class="sticky loc">${esc(d[3])}<small>${esc(d[2])}</small></td><td class="scope">${nf(d[5])}<small>${d[4]}</small></td><td>${n}</td>${x.st.map((s,i)=>!s?`<td class="stc na" title="Not applicable for this line">${DASH}</td>`
+    :`<td class="stc"><div class="sc">${pill(s.s)}<span class="meta${s.late?" late":""}" title="${s.s==="Complete"?"Completed":"Forecast"} ${fmtL(s.dt)}${s.late?" — date passed, not complete":""}">${nf(s.q)}/${nf(d[5])} · ${s.late?ic.clock:""}${fmt(s.dt)}</span></div></td>`).join("")}</tr>`})});
+ if(!rows.length)h+=`<tr><td class="emptycell" colspan="${3+STAGES.length}"><div class="empty" style="margin:16px">No ${show==="late"?"overdue":show==="block"?"blocked":""} lines for ${esc(scopeTxt)}. Choose “All lines” or clear a filter.</div></td></tr>`;
+ $("tbl").innerHTML=h+"</tbody>";
+ $("tbl").querySelectorAll("button.tog").forEach(b=>b.onclick=()=>{const g=b.dataset.g;closed.has(g)?closed.delete(g):closed.add(g);render();$("tbl").querySelector(`button.tog[data-g="${CSS.escape(g)}"]`)?.focus()});
+}
+["fRes","fCon","fDate"].forEach(i=>$(i).addEventListener("input",render));
+
+const tb=$("theme");tb.innerHTML=ic.moon;
+tb.onclick=()=>{const d=document.documentElement.dataset.theme!=="dark";document.documentElement.dataset.theme=d?"dark":"light";
+ tb.innerHTML=d?ic.sun:ic.moon;tb.setAttribute("aria-pressed",d);tb.setAttribute("aria-label",d?"Switch to light theme":"Switch to dark theme")};
+const tip=$("tip");let tipEl=null;
+const showT=el=>{tipEl=el;tip.innerHTML=el.dataset.tip;const b=el.getBoundingClientRect();
+ const x=Math.min(Math.max(b.left+b.width/2,130),innerWidth-130);tip.style.left=x+"px";tip.style.top=Math.max(b.top,60)+"px";tip.classList.add("on")};
+const hide=()=>{tip.classList.remove("on");tipEl=null};
+document.addEventListener("mouseover",e=>{const el=e.target.closest("[data-tip]");el?showT(el):tipEl&&hide()});
+document.addEventListener("focusin",e=>{const el=e.target.closest("[data-tip]");el?showT(el):hide()});
+document.addEventListener("focusout",hide);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&tipEl){const el=tipEl;hide();el.focus()}});
+addEventListener("scroll",hide,{passive:true});
+new ResizeObserver(([e])=>document.documentElement.style.setProperty("--appbar-h",e.target.offsetHeight+"px")).observe($("appbar"));
+render();
+</script></body></html>

@@ -1,0 +1,420 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Highway Structures Progress</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#f5f6f8;--card:#ffffff;--ink:#2b3237;--muted:#626e76;--faint:#7e8c96;--line:#e0e5e9;--inset:#f4f6f9;--brand:#1793e6;--surface:#ffffff;
+--ok:#008344;--ok-bg:#e4fbf3;--warn:#c27d00;--warn-bg:#fef5e5;--inert:#626e76;--inert-bg:#eef1f4;--bad:#d13636;--bad-bg:#ffecec;
+--s-app:#008300;--s-draft:#6b7a86;--s-reop:#eda100;--s-prog:#2a78d6;--s-rej:#e34948;
+--o1:#86b6ef;--o2:#6da7ec;--o3:#3987e5;--o4:#256abf;--o5:#184f95;
+--tip-bg:#2b3237;--tip-ink:#f4f6f8;--shadow:0 1px 2px rgba(20,30,40,.05),0 2px 8px rgba(20,30,40,.04);
+--ease:cubic-bezier(.2,0,0,1);--r-lg:12px;--r-xl:16px;--r-2xl:22px;--appbar-h:0px;--logo-a:#15375a;--logo-b:#9ab6cd}
+:root[data-theme="dark"]{
+--bg:#0e1216;--card:#161b20;--ink:#f4f6f8;--muted:#c2ccd3;--faint:#99aab6;--line:#2d353d;--inset:#1b2127;--brand:#45a9eb;--surface:#161b20;
+--ok:#52c88f;--ok-bg:rgba(0,164,85,.16);--warn:#f9c566;--warn-bg:rgba(245,158,0,.16);--inert:#99aab6;--inert-bg:#232a31;--bad:#ff8e8e;--bad-bg:rgba(255,67,67,.16);
+--s-app:#2fa84f;--s-draft:#8595a2;--s-reop:#f2b632;--s-prog:#4a90e2;--s-rej:#ef6665;
+--o1:#a9cbf4;--o2:#86b6ef;--o3:#6da7ec;--o4:#3987e5;--o5:#256abf;
+--tip-bg:#f4f6f8;--tip-ink:#161b20;--shadow:none;--logo-a:#e6eef6;--logo-b:#9ab6cd}
+*{box-sizing:border-box}
+html{scroll-padding-top:var(--appbar-h)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 14px/1.45 "Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased;min-height:100dvh}
+.num,td.n,.kv,.val{font-variant-numeric:tabular-nums}
+.wrap{max-width:1500px;margin:0 auto;padding:0 20px calc(28px + env(safe-area-inset-bottom,0px))}
+/* app bar */
+.appbar{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.appbar .in{max-width:1500px;margin:0 auto;padding:14px 20px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px 24px}
+.brand{min-width:0}
+.eyebrow{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--brand)}
+h1{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.15;margin:2px 0 0}
+.lede{font-size:12.5px;color:var(--muted);margin-top:2px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+select,input[type=number]{font:inherit;font-size:13.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;height:36px;padding:0 10px;min-width:140px;transition:border-color .12s var(--ease),box-shadow .12s var(--ease)}
+select{appearance:none;-webkit-appearance:none;padding-right:30px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237e8c96' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center}
+#fProject{min-width:220px}#fSpan{min-width:110px;width:110px}
+select:hover,input:hover{border-color:var(--faint)}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.iconbtn{height:36px;width:36px;display:grid;place-items:center;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:10px;cursor:pointer;transition:transform .12s var(--ease),color .12s var(--ease)}
+.iconbtn:hover{color:var(--ink)}.iconbtn:active{transform:scale(.985)}
+.iconbtn svg{width:16px;height:16px}
+.flexcol{display:flex;flex-direction:column}.grow{flex:1}
+.subsec{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}
+.subsec .cap,.more .cap{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-bottom:10px;display:block}
+.stack.sm{margin:0;height:14px}
+.brow.tr .val em{min-width:58px;text-align:left}
+.nil{font-size:12px;color:var(--faint)}
+#cat .note{margin-top:auto}#cat .subsec+.note{margin-top:max(16px,auto)}
+#cat>.note{margin-top:16px}
+.note b{font-weight:600}
+/* logo */
+.logo{display:flex;align-items:center;gap:9px;padding-right:18px;margin-right:18px;border-right:1px solid var(--line);align-self:center;text-decoration:none}
+.logo svg{height:30px;width:auto;display:block}
+.logo .wm{display:flex;flex-direction:column;line-height:1}
+.logo .wm b{font:700 17px/1 "Montserrat","Inter",sans-serif;letter-spacing:.06em;color:var(--logo-a)}
+.logo .wm b span{color:var(--logo-b)}
+.logo .wm i{font:500 8.5px/1 "Montserrat","Inter",sans-serif;font-style:normal;color:var(--logo-a);margin-top:4px;padding-top:3px;border-top:1px solid var(--logo-a);letter-spacing:.02em}
+.brandrow{display:flex;align-items:center;margin-right:auto;min-width:0}
+@media (max-width:760px){.logo{padding-right:12px;margin-right:12px}.logo .wm{display:none}.logo svg{height:34px}}
+/* sections */
+.sec{margin-top:26px}
+.hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 12px}
+.hd h2{font-size:14.5px;font-weight:600;letter-spacing:-.01em;margin:0}
+.hd p{font-size:12px;color:var(--muted);margin:0}
+.hd .right{margin-left:auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-xl);padding:18px 20px;box-shadow:var(--shadow);min-width:0}
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px 13px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;min-width:0}
+.kh{display:flex;align-items:center;gap:10px;margin-bottom:4px;min-width:0}
+.kic{--c:var(--brand);width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 18%,transparent)}
+.kic svg{width:18px;height:18px}
+.kpi{transition:border-color .12s var(--ease)}.kpi:hover{border-color:color-mix(in srgb,var(--faint) 60%,var(--line))}
+.kh .kl{line-height:1.25}
+.ku{font-size:11.5px;color:var(--faint);margin-top:-2px}
+.kv small{white-space:nowrap}
+.kv{font-size:26px;font-weight:600;letter-spacing:-.03em;line-height:1}
+.kv small{font-size:12px;font-weight:500;letter-spacing:0;color:var(--faint);margin-left:3px}
+.kl{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;display:inline-block}
+.chip{display:inline-flex;align-items:center;gap:4px;align-self:flex-start;font-size:11px;font-weight:500;line-height:1;padding:4px 7px;border-radius:999px;background:var(--inert-bg);color:var(--inert);white-space:nowrap}
+.chip svg{width:11px;height:11px}
+.chip.ok{background:var(--ok-bg);color:var(--ok)}.chip.bad{background:var(--bad-bg);color:var(--bad)}.chip.warn{background:var(--warn-bg);color:var(--warn)}
+/* two-up */
+.row2{display:grid;grid-template-columns:repeat(auto-fit,minmax(390px,1fr));gap:16px}
+@media (max-width:760px){.row2{grid-template-columns:1fr}}
+/* bars */
+.stack{display:flex;gap:2px;height:14px;border-radius:4px;overflow:hidden;background:var(--inset);margin:4px 0 16px}
+.seg{height:100%;transition:filter .12s var(--ease);cursor:default;min-width:2px}
+.seg:hover,.seg:focus-visible{filter:brightness(1.12)}
+.seg:focus-visible{outline-offset:1px}
+.rows{display:flex;flex-direction:column;gap:10px}
+.brow{display:grid;grid-template-columns:110px minmax(0,1fr) 104px;align-items:center;gap:12px;font-size:13px}
+.brow .lab{color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.track{height:14px;background:var(--inset);border-radius:4px;overflow:hidden}
+.track .seg{border-radius:4px}
+.val{font-size:13px;font-weight:500;text-align:right;white-space:nowrap;min-width:52px}
+.val em{font-style:normal;color:var(--faint);font-weight:400;margin-left:6px;display:inline-block;min-width:38px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.more{border-top:1px solid var(--line);margin-top:14px;padding-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.more .cap{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);width:100%;margin-bottom:2px}
+.more .chip{font-size:11.5px;padding:5px 8px;background:var(--inset);color:var(--ink)}
+.more .chip b{font-weight:500;color:var(--muted)}
+.note{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--warn);background:var(--warn-bg);border-radius:10px;padding:8px 10px;margin-top:14px}
+.note svg{width:14px;height:14px;flex:none;margin-top:1px}
+.empty{font-size:13px;color:var(--muted);text-align:center;padding:28px 12px;background:var(--inset);border-radius:var(--r-lg)}
+/* table */
+.tblcard{padding:0;overflow:hidden}
+.scrollx{overflow-x:auto;max-width:100%}
+table{border-collapse:separate;border-spacing:0;width:100%;font-size:13px}
+th{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);text-align:right;padding:10px 12px;background:var(--inset);border-bottom:1px solid var(--line);white-space:nowrap}
+th.mo{text-align:center;color:var(--ink);letter-spacing:.05em;border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+th.first{border-left:1px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.n{text-align:right}
+td.first{border-left:1px solid var(--line)}
+th.sticky,td.sticky{position:sticky;left:0;z-index:2;text-align:left;background:var(--card);box-shadow:1px 0 0 var(--line)}
+th.sticky{background:var(--inset);z-index:3}
+tr.trade td{font-weight:600}
+tr.trade td.sticky{background:var(--card)}
+tr.child td{color:var(--muted);background:color-mix(in srgb,var(--inset) 55%,var(--card))}
+tr.child td.sticky{padding-left:44px;background:color-mix(in srgb,var(--inset) 55%,var(--card))}
+tr:last-child td{border-bottom:0}
+tbody tr:hover td{background:var(--inset)}
+td.rate{font-weight:600;color:var(--ink)}
+tr.child td.rate{font-weight:500}
+.unit{color:var(--faint);font-weight:400;margin-left:3px;font-size:11.5px}
+.tog{font:inherit;display:inline-flex;align-items:center;gap:8px;background:none;border:0;color:inherit;padding:0;cursor:pointer;font-weight:600}
+.tog .cv{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;border:1px solid var(--line);background:var(--card);color:var(--muted);transition:transform .12s var(--ease)}
+.tog .cv svg{width:12px;height:12px;transition:transform .2s var(--ease)}
+.tog[aria-expanded="true"] .cv svg{transform:rotate(90deg)}
+.tog:active .cv{transform:scale(.97)}
+.textbtn{font:inherit;font-size:12px;font-weight:500;color:var(--brand);background:none;border:0;padding:4px 2px;cursor:pointer}
+.textbtn:hover{text-decoration:underline}
+.formula{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--muted);padding:12px 20px;border-top:1px solid var(--line);background:var(--card)}
+.formula b{color:var(--ink);font-weight:600}
+.foot{font-size:11.5px;color:var(--faint);margin-top:18px}
+/* tooltip */
+#tip{position:fixed;z-index:9999;pointer-events:none;background:var(--tip-bg);color:var(--tip-ink);font-size:12px;line-height:1.35;padding:7px 9px;border-radius:8px;max-width:240px;opacity:0;transform:translate(-50%,calc(-100% - 8px)) scale(.98);transition:opacity .09s var(--ease),transform .09s var(--ease)}
+#tip.on{opacity:1;transform:translate(-50%,calc(-100% - 8px))}
+#tip b{font-weight:600}
+@media (max-width:760px){
+ .wrap{padding:0 14px calc(24px + env(safe-area-inset-bottom,0px))}
+ .appbar .in{padding:12px 14px}
+ .filters{width:100%}.fld{flex:1 1 140px}
+ select,input[type=number]{font-size:16px;width:100%;min-width:0}#fProject,#fSpan{min-width:0;width:100%}
+ .brow{grid-template-columns:84px minmax(0,1fr) 96px;gap:10px}
+ .card{padding:16px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}}
+/* ---- highway structures additions ---- */
+.mini{height:6px;border-radius:3px;background:var(--inset);overflow:hidden;margin-top:6px}
+.mini>i{display:block;height:100%;background:var(--brand);border-radius:3px}
+.ksub{font-size:11.5px;color:var(--faint)}
+.kgroup{margin-top:20px}
+.kgroup>.cap{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin:0 0 8px;display:flex;align-items:center;gap:10px}
+.kgroup>.cap::after{content:"";flex:1;height:1px;background:var(--line)}
+.kgroup .kpis{margin-top:0}
+.kv .of{font-size:14px;font-weight:500;color:var(--faint);letter-spacing:0;margin-left:4px}
+.kv.bad{color:var(--bad)}
+.about{margin-top:18px;display:flex;gap:10px;align-items:flex-start;font-size:12px;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:10px 14px}
+.about svg{width:15px;height:15px;flex:none;color:var(--brand);margin-top:1px}
+.about details summary{cursor:pointer;color:var(--ink);font-weight:500;list-style:none}
+.about details summary::-webkit-details-marker{display:none}
+.about details summary span{color:var(--brand);font-weight:500;margin-left:6px}
+.about details[open] summary span{display:none}
+.about details p{margin:6px 0 0;line-height:1.5}
+/* segmented + chips */
+.seg-ctl{display:inline-flex;background:var(--inset);border:1px solid var(--line);border-radius:10px;padding:2px;gap:2px;flex-wrap:wrap}
+.seg-ctl button{font:inherit;font-size:12px;font-weight:500;border:0;background:none;color:var(--muted);padding:5px 11px;border-radius:8px;cursor:pointer;transition:background .12s var(--ease),color .12s var(--ease);display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.seg-ctl button b{font-weight:600;font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums}
+.seg-ctl button[aria-pressed="true"]{background:var(--card);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg-ctl button:active{transform:scale(.985)}
+.ctl{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-bottom:12px}
+.ctl .fld select{height:32px;font-size:12.5px;min-width:190px}
+.ctl .fld{flex-direction:row;align-items:center;gap:8px}
+.lgd{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted)}
+.lgd span{display:inline-flex;align-items:center;gap:6px}
+.lgd svg{width:12px;height:12px}
+.lgd.right{margin-left:auto}
+/* chainage map */
+.mapwrap{overflow-x:auto;margin:0 -4px;padding:0 4px}
+.mapwrap svg{display:block;width:100%;min-width:760px;height:auto}
+.map .lane{fill:var(--inset)}
+.map .gl{stroke:var(--line);stroke-width:1}
+.map .tk{fill:var(--faint);font-size:10.5px;font-family:inherit}
+.map .ln{fill:var(--ink);font-size:12px;font-weight:500;font-family:inherit}
+.map .ls{fill:var(--faint);font-size:10.5px;font-family:inherit}
+.map .pt{cursor:default;transition:opacity .12s var(--ease),filter .12s var(--ease);outline:none}
+.map .pt:hover,.map .pt:focus-visible{filter:brightness(1.12)}
+.map .pt:focus-visible{stroke:var(--brand)!important;stroke-width:2.5!important}
+.map .dim{opacity:.12}
+.map .lanedim{opacity:.35}
+.stats{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12.5px;color:var(--muted);margin-top:10px}
+.stats b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.sect{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:14px}
+.sect>div{border-radius:10px;padding:8px 10px;background:var(--inset);display:flex;flex-direction:column;gap:4px;min-width:0}
+.sect .k{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--faint)}
+.sect .v{font-size:16px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sect .n{font-size:11px;color:var(--faint)}
+.sect .sbar{display:flex;gap:1px;height:6px;border-radius:3px;overflow:hidden;background:var(--line)}
+.sect .sbar i{display:block;height:100%}
+@media (max-width:760px){.sect{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.subcap{font-size:10.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--faint);margin-top:18px;padding-top:14px;border-top:1px solid var(--line)}
+/* type table */
+.card.tblcard{padding:0}
+.tbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 16px;border-bottom:1px solid var(--line)}
+#ttbl th{text-align:right}#ttbl th:first-child{text-align:left}
+#ttbl td{text-align:right;font-variant-numeric:tabular-nums}
+#ttbl td:first-child{text-align:left;font-weight:500}
+#ttbl td.bar{text-align:left;min-width:220px;width:30%}
+.sb{display:flex;gap:2px;height:14px;border-radius:4px;overflow:hidden}
+.sb i{display:block;height:100%;min-width:2px}
+.sbtrack{background:var(--inset);border-radius:4px}
+.dchip{display:inline-block;font-size:11px;font-weight:600;border-radius:999px;padding:2px 7px;margin-left:6px}
+.dchip.up{background:var(--warn-bg);color:var(--warn)}.dchip.dn{background:var(--inert-bg);color:var(--inert)}
+.pctc{font-weight:600}
+tr.total td{font-weight:600;background:var(--inset);border-top:1px solid var(--line)}
+td.nil{color:var(--faint)}
+/* paired bars */
+.pair{display:grid;grid-template-columns:minmax(0,110px) minmax(0,1fr) 88px;gap:4px 12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.pair:last-child{border-bottom:0}
+.pair .lab{grid-row:span 2;font-weight:500}
+.pair .track{height:10px}
+.pair .val{grid-row:span 2;text-align:right}
+.pair .val small{display:block;font-size:11px;font-weight:400;color:var(--faint)}
+.var{display:grid;grid-template-columns:minmax(0,110px) minmax(0,1fr) 110px;gap:12px;align-items:center;font-size:13px}
+.var .val b{font-weight:600}
+.var .val small{color:var(--faint);font-weight:400;margin-left:6px}
+.basenote{font-size:12px;color:var(--muted);background:var(--bad-bg);color:var(--bad);border-radius:10px;padding:8px 10px;margin-bottom:14px;display:flex;gap:8px;align-items:center}
+.basenote svg{width:14px;height:14px;flex:none}
+</style></head><body>
+</head><body>
+<header class="appbar" id="appbar"><div class="in">
+ <div class="brandrow"><a class="logo" href="#" aria-label="VisiLean — Construction, simplified">
+  <svg viewBox="0 0 640 490" aria-hidden="true"><polygon fill="var(--logo-b)" points="165,122 238,0 480,88 242,490"/><polygon fill="var(--logo-a)" points="0,62 242,150 242,490 0,405"/><polygon fill="var(--logo-a)" points="480,88 480,425 315,368"/><polygon fill="var(--logo-b)" points="480,295 638,350 480,425"/></svg>
+  <span class="wm"><b>VISI<span>LEAN</span></b><i>Construction, simplified</i></span></a>
+ <div class="brand">
+  <div class="eyebrow">VisiLean · Highway structures</div>
+  <h1>Schedule G — structures progress</h1>
+  <div class="lede">~28 km national highway package · structure DPR, Sep 2026, against the construction programme baseline</div>
+ </div></div>
+ <div class="filters">
+  <button class="iconbtn" id="theme" aria-pressed="false" aria-label="Switch to dark theme"></button>
+ </div>
+</div></header>
+
+<main class="wrap">
+ <div class="about"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+  <details><summary>Anonymised sample — ROB, HPC and Interchange are left out of every total<span>About this data</span></summary>
+  <p>Client, project name, location and original chainages have been removed. Chainage is measured from a notional project start (Km 0), and subcontractors are labelled A–I. Quantities, counts, statuses and variances are unchanged from the source. No cost data is shown; dates and variance are at structure-type level. ROB, HPC and Interchange are excluded because no verifiable count exists for them.</p></details></div>
+
+ <div class="kgroup"><div class="cap">Schedule</div><div class="kpis" id="k1"></div></div>
+ <div class="kgroup"><div class="cap">Quantities</div><div class="kpis" id="k2"></div></div>
+
+ <section class="sec card" aria-labelledby="hMap">
+  <div class="hd"><h2 id="hMap">Chainage-wise progress</h2><p>Km 0 to 28.8 · 136 of 176 structures have a recorded chainage</p></div>
+  <div class="ctl">
+   <label class="fld"><span>Type</span><select id="fType"></select></label>
+   <div class="seg-ctl" role="group" aria-label="Highlight status" id="fStat"></div>
+   <div class="lgd right" id="mlgd"></div>
+  </div>
+  <div class="mapwrap"><div class="map" id="map"></div></div>
+  <div class="stats" id="mstats"></div>
+  <div class="subcap">Weighted progress by 4 km section</div>
+  <div class="sect" id="sect"></div>
+ </section>
+
+ <section class="sec" aria-labelledby="hT">
+  <div class="hd"><h2 id="hT">Physical progress by structure type</h2><p>Weighted progress = completed + ½ in progress, over actual site count</p></div>
+  <div class="card tblcard">
+   <div class="tbar"><div class="seg-ctl" role="group" aria-label="Show types with" id="fTbl"></div><div class="lgd right" id="tlgd"></div></div>
+   <div class="scrollx"><table id="ttbl"></table></div>
+  </div>
+ </section>
+
+ <div class="row2 sec">
+  <section class="card" aria-labelledby="hPA">
+   <div class="hd"><h2 id="hPA">Planned vs actual count</h2><p>BOQ against structures found on site</p></div>
+   <div class="lgd" style="margin-bottom:6px"><span><i class="sq" style="width:10px;height:10px;border-radius:3px;display:inline-block;background:var(--o1)"></i>BOQ planned</span><span><i style="width:10px;height:10px;border-radius:3px;display:inline-block;background:var(--o4)"></i>Actual on site</span></div>
+   <div id="pa"></div>
+  </section>
+  <section class="card" aria-labelledby="hV">
+   <div class="hd"><h2 id="hV">Schedule variance by type</h2><p>Days late, actual end against baseline</p></div>
+   <div id="vr"></div>
+  </section>
+ </div>
+ <p class="foot">Anonymised sample for illustration. Subcontractors A–I are placeholders.</p>
+</main>
+<div id="tip" role="tooltip"></div>
+<script>
+const chainageData = [{"type":"Box Culvert","km":0.8,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Box Culvert","km":0.781,"status":"Completed","contractor":"Subcontractor A","concrete":242.1},{"type":"Box Culvert","km":1.027,"status":"In Progress","contractor":"Subcontractor A","concrete":180.3},{"type":"Box Culvert","km":1.063,"status":"In Progress","contractor":"Subcontractor A","concrete":174.9},{"type":"Box Culvert","km":1.209,"status":"Completed","contractor":"Subcontractor B & Subcontractor A","concrete":211.9},{"type":"Box Culvert (COS)","km":2.396,"status":"Completed","contractor":"Subcontractor C","concrete":11.2},{"type":"Box Culvert","km":2.6,"status":"Completed","contractor":"Subcontractor C","concrete":248.6},{"type":"Box Culvert","km":2.952,"status":"In Progress","contractor":"Subcontractor A & Subcontractor C","concrete":162.6},{"type":"Box Culvert","km":3.412,"status":"Completed","contractor":"Subcontractor C & Subcontractor A","concrete":84.2},{"type":"Box Culvert (COS)","km":5.9,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Box Culvert","km":7.652,"status":"Completed","contractor":"Subcontractor C","concrete":217.9},{"type":"Box Culvert","km":8.31,"status":"Completed","contractor":"Subcontractor D","concrete":402.1},{"type":"Box Culvert (COS)","km":9.186,"status":"Completed","contractor":"Subcontractor C","concrete":15.0},{"type":"Box Culvert","km":10.73,"status":"In Progress","contractor":"Subcontractor C","concrete":164.6},{"type":"Box Culvert","km":11.353,"status":"Completed","contractor":"Subcontractor B","concrete":120.3},{"type":"Box Culvert","km":11.692,"status":"Completed","contractor":"Subcontractor E","concrete":163.1},{"type":"Box Culvert","km":12.055,"status":"In Progress","contractor":"Subcontractor E","concrete":194.9},{"type":"Box Culvert","km":12.918,"status":"Completed","contractor":"Subcontractor F","concrete":154.5},{"type":"Box Culvert","km":13.097,"status":"In Progress","contractor":"Subcontractor F","concrete":154.5},{"type":"Box Culvert","km":13.792,"status":"Completed","contractor":"Subcontractor G","concrete":112.7},{"type":"Box Culvert (COS)","km":13.972,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Box Culvert (COS)","km":14.155,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Box Culvert","km":15.472,"status":"Completed","contractor":"Subcontractor H","concrete":110.6},{"type":"Box Culvert","km":15.972,"status":"Completed","contractor":"Subcontractor H","concrete":130.5},{"type":"Box Culvert","km":16.272,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Box Culvert","km":16.562,"status":"In Progress","contractor":"Subcontractor G","concrete":248.3},{"type":"Box Culvert","km":16.843,"status":"In Progress","contractor":"Subcontractor H","concrete":14.4},{"type":"Box Culvert","km":19.082,"status":"In Progress","contractor":"Subcontractor G","concrete":206.2},{"type":"Box Culvert","km":20.221,"status":"Completed","contractor":"Subcontractor I","concrete":216.8},{"type":"Box Culvert","km":21.329,"status":"Completed","contractor":"Subcontractor D","concrete":223.0},{"type":"Box Culvert","km":22.792,"status":"Completed","contractor":"Subcontractor B","concrete":451.3},{"type":"Box Culvert","km":23.369,"status":"Completed","contractor":"Subcontractor I","concrete":344.9},{"type":"Box Culvert","km":24.0,"status":"In Progress","contractor":"Subcontractor C","concrete":423.1},{"type":"Box Culvert","km":24.757,"status":"Completed","contractor":"Subcontractor C","concrete":242.6},{"type":"Box Culvert","km":25.573,"status":"In Progress","contractor":"Subcontractor A","concrete":5.5},{"type":"Box Culvert","km":25.77,"status":"Completed","contractor":"Subcontractor I","concrete":119.6},{"type":"Box Culvert","km":26.372,"status":"Completed","contractor":"Subcontractor I","concrete":245.9},{"type":"Box Culvert","km":27.305,"status":"Completed","contractor":"Subcontractor I","concrete":49.6},{"type":"Box Culvert","km":27.716,"status":"Completed","contractor":"Subcontractor C","concrete":320.4},{"type":"Box Culvert","km":27.843,"status":"Completed","contractor":"Subcontractor C","concrete":230.1},{"type":"Box Culvert","km":28.098,"status":"Completed","contractor":"Subcontractor C","concrete":317.4},{"type":"Box Culvert","km":28.201,"status":"Completed","contractor":"Subcontractor C","concrete":193.1},{"type":"Box Culvert","km":28.512,"status":"Completed","contractor":"Subcontractor A","concrete":475.0},{"type":"Box Culvert","km":28.702,"status":"Completed","contractor":"Subcontractor A","concrete":280.8},{"type":"Box Culvert","km":28.802,"status":"Completed","contractor":"Subcontractor B","concrete":396.6},{"type":"Utility Duct","km":0.8,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":2.411,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":3.8,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":4.41,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":5.129,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":5.832,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":6.652,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":8.212,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":8.842,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":9.102,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":9.772,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":10.092,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":10.55,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":10.907,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":11.242,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":11.472,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":12.612,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":12.712,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":13.242,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":13.442,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":13.552,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":13.632,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":14.492,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":14.772,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":15.082,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":15.112,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":15.572,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":15.942,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":15.982,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":16.187,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":16.422,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":16.872,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":17.042,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":17.199,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":17.342,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":17.472,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":18.707,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":19.532,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":19.572,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":19.667,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":19.702,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":19.762,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":20.602,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":20.832,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":22.042,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":22.972,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":23.972,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":24.362,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":25.792,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":26.492,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":27.252,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"Utility Duct","km":27.942,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"VUP","km":1.5,"status":"In Progress","contractor":"Subcontractor B","concrete":297.6},{"type":"VUP","km":6.649,"status":"In Progress","contractor":"Subcontractor I","concrete":176.7},{"type":"VUP","km":10.907,"status":"In Progress","contractor":"Subcontractor C","concrete":376.9},{"type":"VUP","km":12.705,"status":"In Progress","contractor":"Subcontractor F & Subcontractor G","concrete":313.4},{"type":"VUP","km":13.442,"status":"In Progress","contractor":"Subcontractor G","concrete":383.2},{"type":"VUP","km":15.093,"status":"In Progress","contractor":"Subcontractor H","concrete":144.3},{"type":"VUP","km":16.855,"status":"In Progress","contractor":"Subcontractor H","concrete":452.2},{"type":"VUP","km":18.705,"status":"In Progress","contractor":"Subcontractor G","concrete":493.8},{"type":"VUP","km":20.617,"status":"In Progress","contractor":"Subcontractor D","concrete":444.4},{"type":"VUP","km":26.477,"status":"In Progress","contractor":"Subcontractor I","concrete":380},{"type":"LVUP (COS)","km":5.832,"status":"Not Started","contractor":"Not recorded","concrete":0},{"type":"LVUP","km":8.842,"status":"Completed","contractor":"Subcontractor C","concrete":781.6},{"type":"LVUP","km":9.769,"status":"Completed","contractor":"Subcontractor C","concrete":584.5},{"type":"LVUP","km":15.57,"status":"Completed","contractor":"Subcontractor H","concrete":457},{"type":"LVUP","km":16.187,"status":"Completed","contractor":"Subcontractor D","concrete":411.4},{"type":"LVUP","km":17.179,"status":"Completed","contractor":"Subcontractor I","concrete":931.0},{"type":"LVUP","km":19.442,"status":"Completed","contractor":"Subcontractor C","concrete":492.8},{"type":"LVUP","km":19.762,"status":"Completed","contractor":"Subcontractor C","concrete":476.5},{"type":"LVUP","km":22.004,"status":"Completed","contractor":"Subcontractor C","concrete":484.2},{"type":"LVUP","km":23.972,"status":"Completed","contractor":"Subcontractor C","concrete":746},{"type":"LVUP","km":27.951,"status":"Completed","contractor":"Subcontractor C","concrete":468.5},{"type":"LVUP","km":28.172,"status":"Completed","contractor":"Subcontractor C","concrete":531},{"type":"SVUP","km":2.411,"status":"Completed","contractor":"Subcontractor D","concrete":431.5},{"type":"SVUP","km":5.131,"status":"Completed","contractor":"Subcontractor C","concrete":344.2},{"type":"SVUP","km":7.442,"status":"Completed","contractor":"Subcontractor C","concrete":266},{"type":"SVUP","km":25.793,"status":"Completed","contractor":"Subcontractor I","concrete":267.2},{"type":"SVUP","km":25.977,"status":"Completed","contractor":"Subcontractor C","concrete":257.2},{"type":"MJB","km":3.863,"status":"In Progress","contractor":"Subcontractor C","concrete":1864.3},{"type":"MJB","km":4.345,"status":"In Progress","contractor":"Subcontractor C","concrete":2024.7},{"type":"MJB","km":10.608,"status":"In Progress","contractor":"Subcontractor C","concrete":2390.7},{"type":"MJB","km":17.882,"status":"In Progress","contractor":"Subcontractor C","concrete":928.6},{"type":"MNB","km":0.8,"status":"In Progress","contractor":"Subcontractor A","concrete":0},{"type":"MNB","km":4.022,"status":"In Progress","contractor":"Subcontractor C","concrete":1019.4},{"type":"MNB","km":4.117,"status":"In Progress","contractor":"Subcontractor C","concrete":1155.9},{"type":"MNB","km":4.752,"status":"In Progress","contractor":"Subcontractor C","concrete":464.9},{"type":"MNB","km":5.907,"status":"In Progress","contractor":"Subcontractor C","concrete":725.8},{"type":"MNB","km":7.967,"status":"In Progress","contractor":"Subcontractor C","concrete":1532.7},{"type":"MNB","km":9.397,"status":"In Progress","contractor":"Subcontractor C","concrete":1735.5},{"type":"MNB","km":18.488,"status":"In Progress","contractor":"Subcontractor G","concrete":670}];
+const progressData = [
+  ["Box Culvert","Nos.",59,80,49,20,11],
+  ["Box Culvert (COS)","Nos.",null,5,2,0,3],
+  ["VUP","Nos.",3,10,0,10,0],
+  ["LVUP","Nos.",1,11,11,0,0],
+  ["SVUP","Nos.",12,5,5,0,0],
+  ["MJB","Nos.",null,4,0,4,0],
+  ["MNB","Nos.",9,8,0,7,1],
+  ["Utility Duct","Nos.",null,52,0,0,52],
+  ["LVUP (COS)","Nos.",null,1,0,0,1],
+];
+const PA=[["Box Culvert",59,80],["Minor Bridge",9,8],["SVUP",12,5],["LVUP",1,11],["VUP",3,10]];
+const VAR=[["Box Culvert",1322],["Minor Bridge",1133],["SVUP",1198],["LVUP",1288],["VUP",1287],["Major Bridge",885]];
+const $=id=>document.getElementById(id),DASH="—";
+const nf=(v,d=0)=>v==null||!isFinite(v)?DASH:v.toLocaleString("en-IN",{minimumFractionDigits:d,maximumFractionDigits:d});
+const pct=v=>v==null||!isFinite(v)?DASH:(Math.round(v*10)/10).toLocaleString("en-IN",{maximumFractionDigits:1})+"%";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const svgI=(p,w=2)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ic={moon:svgI('<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>'),sun:svgI('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+ warn:svgI('<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/>'),clock:svgI('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>')};
+const KI={bridge:'<path d="M2 18h20M4 18v-6M20 18v-6M2 12h20"/><path d="M4 12a8 8 0 0 1 16 0"/><path d="M9 12v6M15 12v6"/>',
+ gauge:'<path d="M12 14 16 10"/><path d="M3.3 19A10 10 0 1 1 20.7 19"/>',late:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M5 3 2 6M22 6l-3-3"/>',
+ flag:'<path d="M4 22V4"/><path d="M4 4h13l-2 4 2 4H4"/>',cube:'<path d="m21 16-9 5-9-5V8l9-5 9 5z"/><path d="m3 8 9 5 9-5M12 13v8"/>',
+ grid:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>',wall:'<path d="M3 21V9l9-6 9 6v12"/><path d="M3 15h18M3 9h18M8 9v6M16 9v6M12 15v6"/>',
+ box:'<rect x="2" y="8" width="20" height="10" rx="1"/><path d="M8 8v10M16 8v10"/><path d="M2 20h20"/>'};
+const kh=(k,label,c)=>`<div class="kh"><span class="kic" aria-hidden="true"${c?` style="--c:${c}"`:""}>${svgI(KI[k])}</span><div class="kl">${label}</div></div>`;
+const ST=["Completed","In Progress","Not Started"],SL={"Completed":"Completed","In Progress":"In progress","Not Started":"Not started"};
+const SCOL={"Completed":"var(--ok)","In Progress":"var(--s-reop)","Not Started":"var(--s-rej)"};
+// status glyphs — shape carries meaning as well as colour
+const glyph=(st,x,y,cls,tipTxt)=>{const a=`class="pt ${cls}" tabindex="0" data-tip="${tipTxt}"`;
+ if(st==="Completed")return `<circle ${a} cx="${x}" cy="${y}" r="5.5" fill="var(--ok)" stroke="var(--surface)" stroke-width="1.5"/>`;
+ if(st==="In Progress")return `<rect ${a} x="${x-5}" y="${y-5}" width="10" height="10" rx="1.5" transform="rotate(45 ${x} ${y})" fill="var(--s-reop)" stroke="var(--surface)" stroke-width="1.5"/>`;
+ return `<circle ${a} cx="${x}" cy="${y}" r="4.5" fill="var(--surface)" stroke="var(--s-rej)" stroke-width="2"/>`};
+const legendGlyph=st=>`<svg viewBox="0 0 14 14">${st==="Completed"?'<circle cx="7" cy="7" r="5.5" fill="var(--ok)"/>':st==="In Progress"?'<rect x="3" y="3" width="8" height="8" rx="1" transform="rotate(45 7 7)" fill="var(--s-reop)"/>':'<circle cx="7" cy="7" r="4.5" fill="none" stroke="var(--s-rej)" stroke-width="2"/>'}</svg>`;
+const fmtKm=km=>{const k=Math.floor(km),m=Math.round((km-k)*1000);return `${k}+${String(m).padStart(3,"0")}`};
+const w=a=>a.length?(a.filter(d=>d.status==="Completed").length+.5*a.filter(d=>d.status==="In Progress").length)/a.length*100:null;
+const types=[...new Set(chainageData.map(d=>d.type))];
+let fType="",fStat="",fTbl="All";
+
+// ---------- KPIs (static summary, computed where the data allows) ----------
+const tot=progressData.reduce((t,r)=>[t[0]+r[3],t[1]+r[4],t[2]+r[5],t[3]+r[6]],[0,0,0,0]);
+const wp=(tot[1]+.5*tot[2])/tot[0]*100,avgVar=VAR.reduce((a,x)=>a+x[1],0)/VAR.length,conc=chainageData.reduce((a,d)=>a+d.concrete,0),concN=chainageData.filter(d=>d.concrete>0).length;
+$("k1").innerHTML=[
+ `<div class="kpi">${kh("bridge","Structures confirmed")}<div class="kv">${nf(tot[0])}</div><div class="ksub">${progressData.length} types · ROB, HPC, Interchange excluded</div></div>`,
+ `<div class="kpi">${kh("gauge","Weighted physical progress")}<div class="kv">${nf(wp,1)}<small>%</small></div><div class="mini"><i style="width:${wp}%"></i></div><div class="ksub">${tot[1]} completed · ${tot[2]} in progress · ${tot[3]} yet to start</div></div>`,
+ `<div class="kpi">${kh("late","Average schedule variance","var(--bad)")}<div class="kv bad">+${nf(Math.round(avgVar))}<small>days</small></div><div class="ksub">Actual end vs baseline, ${VAR.length} matched types</div><span class="chip bad">${ic.clock}≈ ${nf(avgVar/365,1)} years late</span></div>`,
+ `<div class="kpi">${kh("flag","Current milestone")}<div class="kv">Past MS-4</div><div class="ksub">On the S-curve · baseline completion was Jul 2024</div></div>`].join("");
+$("k2").innerHTML=[
+ `<div class="kpi">${kh("cube","Concrete cast to date")}<div class="kv">${nf(Math.round(conc))}<small>Cum</small></div><div class="ksub">All grades, ${concN} structures with pours</div></div>`,
+ `<div class="kpi">${kh("grid","RE wall panels cast")}<div class="kv">${nf(123296)}<small>Sqm</small></div><div class="ksub">BOQ ${nf(13178)} Sqm</div><span class="chip warn">${ic.warn}${nf(123296/13178,1)}× BOQ — check</span></div>`,
+ `<div class="kpi">${kh("wall","RE wall panels erected")}<div class="kv">${nf(40955)}<small>Sqm</small></div><div class="ksub">${pct(40955/123296*100)} of panels cast</div></div>`,
+ `<div class="kpi">${kh("box","Box culverts")}<div class="kv">80<span class="of">/ 59 planned</span></div><div class="ksub">Scope grew beyond the original BOQ</div><span class="chip warn">+21 over BOQ</span></div>`].join("");
+
+// ---------- chainage map ----------
+$("fType").innerHTML=`<option value="">All types</option>`+types.map(t=>`<option>${t}</option>`).join("");
+$("mlgd").innerHTML=ST.map(s=>`<span>${legendGlyph(s)}${SL[s]}</span>`).join("");
+function renderMap(){
+ const rows=chainageData.filter(d=>!fType||d.type===fType);
+ $("fStat").innerHTML=[["","All"],...ST.map(s=>[s,SL[s]])].map(([k,l])=>`<button data-s="${k}" aria-pressed="${fStat===k}">${l}<b>${k?rows.filter(d=>d.status===k).length:rows.length}</b></button>`).join("");
+ $("fStat").querySelectorAll("button").forEach(b=>b.onclick=()=>{fStat=b.dataset.s;renderMap()});
+ const W=1000,ml=200,mr=14,mt=6,LH=32,H=mt+LH*types.length+26,X=km=>ml+km/29*(W-ml-mr);
+ let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Structures plotted by chainage and type, shaped and coloured by status">`;
+ for(let k=0;k<=28;k+=2){const x=X(k);s+=`<line class="gl" x1="${x}" x2="${x}" y1="${mt}" y2="${mt+LH*types.length}"/><text class="tk" x="${x}" y="${H-8}" text-anchor="middle">${k}</text>`}
+ s+=`<text class="tk" x="${W-mr}" y="${H-8}" text-anchor="end">km</text>`;
+ types.forEach((t,i)=>{const y=mt+LH*i,a=chainageData.filter(d=>d.type===t),dim=fType&&fType!==t?" lanedim":"";
+  s+=`<g class="${dim}">${i%2?"":`<rect class="lane" x="0" y="${y}" width="${W-mr}" height="${LH}" rx="6"/>`}
+   <text class="ln" x="12" y="${y+LH/2}" dominant-baseline="central">${esc(t)}</text><text class="ls" x="${ml-12}" y="${y+LH/2}" dominant-baseline="central" text-anchor="end">${a.length} · ${Math.round(w(a))}%</text>`;
+  // place not-started first so completed sit on top
+  [...a].sort((p,q)=>ST.indexOf(q.status)-ST.indexOf(p.status)).forEach(d=>{const cls=(fStat&&d.status!==fStat)?"dim":"";
+   s+=glyph(d.status,X(d.km),y+LH/2,cls,`<b>${esc(d.type)}</b> · Km ${fmtKm(d.km)}<br>${SL[d.status]} · ${esc(d.contractor)}<br>Concrete ${d.concrete?nf(d.concrete,1)+" Cum":"— none poured"}`)});
+  s+=`</g>`});
+ $("map").innerHTML=s+"</svg>";
+ const c=st=>rows.filter(d=>d.status===st).length;
+ $("mstats").innerHTML=`<span>Showing <b>${rows.length}</b> structures</span>${ST.map(st=>`<span><b>${c(st)}</b> ${SL[st].toLowerCase()}</span>`).join("")}<span>Weighted <b>${pct(w(rows))}</b></span>`;
+ // 4 km sections
+ const secs=[0,4,8,12,16,20,24].map(a=>({a,b:a===24?28.8:a+4}));
+ $("sect").innerHTML=secs.map(({a,b})=>{const r=rows.filter(d=>d.km>=a&&(b===28.8?d.km<=29:d.km<b)),v=w(r);
+  return `<div tabindex="0" data-tip="<b>Km ${a}–${b}</b><br>${r.length} structures · ${ST.map(st=>r.filter(d=>d.status===st).length+" "+SL[st].toLowerCase()).join(", ")}"><span class="k">Km ${a}–${b}</span><span class="v">${v==null?DASH:Math.round(v)+"%"}</span>
+   <span class="sbar">${ST.map(st=>{const n=r.filter(d=>d.status===st).length;return n?`<i style="flex:${n};background:${SCOL[st]}"></i>`:""}).join("")}</span><span class="n">${r.length?r.length+" structures":"No structures"}</span></div>`}).join("");
+}
+$("fType").addEventListener("input",()=>{fType=$("fType").value;renderMap()});
+
+// ---------- type table ----------
+$("tlgd").innerHTML=[["Completed","var(--ok)"],["In progress","var(--s-reop)"],["Yet to start","var(--s-rej)"]].map(([l,c])=>`<span><i style="width:10px;height:10px;border-radius:3px;display:inline-block;background:${c}"></i>${l}</span>`).join("");
+function renderTbl(){
+ const f=[["All","All types"],["Completed","Any completed"],["In Progress","Any in progress"],["Not Started","Any yet to start"]];
+ const keep=r=>fTbl==="All"||(fTbl==="Completed"?r[4]:fTbl==="In Progress"?r[5]:r[6]);
+ $("fTbl").innerHTML=f.map(([k,l])=>`<button data-s="${k}" aria-pressed="${fTbl===k}">${l}<b>${progressData.filter(r=>fTbl&&(k==="All"||(k==="Completed"?r[4]:k==="In Progress"?r[5]:r[6]))).length}</b></button>`).join("");
+ $("fTbl").querySelectorAll("button").forEach(b=>b.onclick=()=>{fTbl=b.dataset.s;renderTbl()});
+ const rows=progressData.filter(keep).sort((a,b)=>b[3]-a[3]),mx=Math.max(...progressData.map(r=>r[3]));
+ let h=`<thead><tr><th>Type of structure</th><th>BOQ planned</th><th>Actual on site</th><th>Completed</th><th>In progress</th><th>Yet to start</th><th style="text-align:left">Status mix</th><th>Weighted</th></tr></thead><tbody>`;
+ const t=[0,0,0,0];
+ rows.forEach(([n,u,pl,ac,co,pr,ye])=>{t[0]+=ac;t[1]+=co;t[2]+=pr;t[3]+=ye;const p=ac?(co+.5*pr)/ac*100:null,d=pl==null?null:ac-pl;
+  h+=`<tr><td>${esc(n)}</td><td class="${pl==null?"nil":""}" ${pl==null?'title="Not in the original BOQ"':""}>${nf(pl)}</td><td>${nf(ac)}${d?`<span class="dchip ${d>0?"up":"dn"}">${d>0?"+":"−"}${Math.abs(d)}</span>`:""}</td><td>${co}</td><td>${pr}</td><td>${ye}</td>
+  <td class="bar"><div class="sbtrack"><div class="sb" style="width:${ac/mx*100}%">${[[co,"Completed","var(--ok)"],[pr,"In progress","var(--s-reop)"],[ye,"Yet to start","var(--s-rej)"]].map(([v,l,c])=>v?`<i tabindex="0" style="flex:${v};background:${c}" data-tip="<b>${esc(n)}</b><br>${v} ${l.toLowerCase()} of ${ac}"></i>`:"").join("")}</div></div></td>
+  <td class="pctc">${p==null?DASH:Math.round(p)+"%"}</td></tr>`});
+ if(!rows.length)h+=`<tr><td colspan="8"><div class="empty">No structure types match this filter.</div></td></tr>`;
+ else h+=`<tr class="total"><td>Total</td><td class="nil">${DASH}</td><td>${t[0]}</td><td>${t[1]}</td><td>${t[2]}</td><td>${t[3]}</td><td class="bar"><div class="sb" style="width:100%">${[[t[1],"var(--ok)"],[t[2],"var(--s-reop)"],[t[3],"var(--s-rej)"]].map(([v,c])=>v?`<i style="flex:${v};background:${c}"></i>`:"").join("")}</div></td><td class="pctc">${pct((t[1]+.5*t[2])/t[0]*100)}</td></tr>`;
+ $("ttbl").innerHTML=h+"</tbody>";
+}
+
+// ---------- planned vs actual, variance ----------
+const pmx=Math.max(...PA.flatMap(x=>[x[1],x[2]]));
+$("pa").innerHTML=PA.sort((a,b)=>b[2]-a[2]).map(([n,p,a])=>{const d=a-p;return `<div class="pair"><span class="lab">${n}</span>
+ <div class="track"><div class="seg" tabindex="0" style="width:${p/pmx*100}%;background:var(--o1)" data-tip="<b>${n}</b><br>BOQ planned ${p}"></div></div>
+ <span class="val">${a}<small>BOQ ${p} · <span style="color:${d>0?"var(--warn)":"var(--muted)"}">${d>0?"+":"−"}${Math.abs(d)}</span></small></span>
+ <div class="track"><div class="seg" tabindex="0" style="width:${a/pmx*100}%;background:var(--o4)" data-tip="<b>${n}</b><br>Actual on site ${a}"></div></div></div>`}).join("");
+const vmx=Math.max(...VAR.map(x=>x[1]));
+$("vr").innerHTML=`<div class="basenote">${ic.clock}<span>Every matched type is 2.4 to 3.6 years behind its baseline end date.</span></div>
+ <div class="rows">${[...VAR].sort((a,b)=>b[1]-a[1]).map(([n,v])=>`<div class="var"><span class="lab">${n}</span><div class="track"><div class="seg" tabindex="0" style="width:${v/vmx*100}%;background:var(--s-rej)" data-tip="<b>${n}</b><br>${nf(v)} days late (${nf(v/365,1)} years)"></div></div><span class="val"><b>${nf(v)} d</b><small>${nf(v/365,1)} yrs</small></span></div>`).join("")}</div>`;
+
+// ---------- theme / tooltip / sticky ----------
+const tb=$("theme");tb.innerHTML=ic.moon;
+tb.onclick=()=>{const d=document.documentElement.dataset.theme!=="dark";document.documentElement.dataset.theme=d?"dark":"light";
+ tb.innerHTML=d?ic.sun:ic.moon;tb.setAttribute("aria-pressed",d);tb.setAttribute("aria-label",d?"Switch to light theme":"Switch to dark theme")};
+const tip=$("tip");let tipEl=null;
+const showT=el=>{tipEl=el;tip.innerHTML=el.dataset.tip;const b=el.getBoundingClientRect();
+ const x=Math.min(Math.max(b.left+b.width/2,130),innerWidth-130);tip.style.left=x+"px";tip.style.top=Math.max(b.top,60)+"px";tip.classList.add("on")};
+const hide=()=>{tip.classList.remove("on");tipEl=null};
+document.addEventListener("mouseover",e=>{const el=e.target.closest("[data-tip]");el?showT(el):tipEl&&hide()});
+document.addEventListener("focusin",e=>{const el=e.target.closest("[data-tip]");el?showT(el):hide()});
+document.addEventListener("focusout",hide);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&tipEl){const el=tipEl;hide();el.focus()}});
+addEventListener("scroll",hide,{passive:true});
+new ResizeObserver(([e])=>document.documentElement.style.setProperty("--appbar-h",e.target.offsetHeight+"px")).observe($("appbar"));
+renderMap();renderTbl();
+</script></body></html>
